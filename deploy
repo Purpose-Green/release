@@ -54,6 +54,11 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+GH_CLI_INSTALLED=false
+if command -v gh &> /dev/null; then
+    export GH_CLI_INSTALLED=true
+fi
+
 main::action
 
 echo "Script finished successfully."
