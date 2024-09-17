@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+# shellcheck disable=SC2034
+declare -r BASH_SKELETON_VERSION="0.1.0"
+
+BASH_SKELETON_ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+export BASH_SKELETON_ROOT_DIR
+
+source "$BASH_SKELETON_ROOT_DIR/src/dev/debug.sh"
+source "$BASH_SKELETON_ROOT_DIR/src/main.sh"
+# Initialize _ARGS as an array
+_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  argument="$1"
+  case $argument in
+    --debug)
+      set -x
+      ;;
+    -e|--env)
+      # shellcheck disable=SC1090
+      source "$2"
+      shift
+      ;;
+    *)
+      _ARGS+=("$argument")
+      ;;
+  esac
+  shift
+done
+
+main::action "${_ARGS[@]:-No args}"
+
+echo "Script finished successfully."
