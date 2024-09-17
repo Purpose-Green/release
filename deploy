@@ -35,12 +35,16 @@ FORCE_DEPLOY=false
 SOURCE_BRANCH=$1
 TARGET_BRANCH=${2:-}
 DEVELOPMENT_BRANCH=${3:-}
+DRY_RUN=${DRY_RUN:-false}
 
 while [[ $# -gt 0 ]]; do
   argument="$1"
   case $argument in
     --debug)
       set -x
+      ;;
+    --dry-run)
+      DRY_RUN=true
       ;;
     -e|--env)
       # shellcheck disable=SC1090
@@ -70,7 +74,9 @@ GH_CLI_INSTALLED=false
 if command -v gh &> /dev/null; then
     GH_CLI_INSTALLED=true
 fi
+
 export GH_CLI_INSTALLED
+export DRY_RUN
 
 TARGET_BRANCH=${TARGET_BRANCH:-"prod"}
 DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-"main"}

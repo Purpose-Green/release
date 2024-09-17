@@ -3,10 +3,11 @@ set -euo pipefail
 
 # shellcheck disable=SC2005
 
-function main::compare_branch_with_target() {
+function compare::source_with_target() {
   local source=$1
   local target=$2
 
+  echo -e "${COLOR_PURPLE}============================================${COLOR_RESET}"
   echo -e "Comparing ${COLOR_ORANGE}$source${COLOR_RESET} with ${COLOR_ORANGE}$target${COLOR_RESET}"
   echo -e "${COLOR_BLUE}============================================${COLOR_RESET}"
   echo -e "Commits to include in the release (into ${COLOR_ORANGE}$target${COLOR_RESET}):"

@@ -19,6 +19,12 @@ function release::generate_new_tag() {
 function release::create_tag() {
   local new_tag=$1
   local changed_files=$2
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping creating a tag ($new_tag)${COLOR_RESET}"
+    return
+  fi
+
   git tag -a "$new_tag" -m "Release $new_tag
 
 Changes:
@@ -47,6 +53,12 @@ function release::create_github_release() {
 
   local changelog_url="https://github.com/$repo_info/compare/$previous_tag...$new_tag"
   local full_changelog="**Full Changelog**: $changelog_url"
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
+    return
+  fi
+
   gh release create "$new_tag" \
     --title "$release_name" \
     --notes "$(echo -e "$commits\n\n$full_changelog")"

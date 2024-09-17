@@ -3,56 +3,44 @@ set -euo pipefail
 
 # shellcheck disable=SC2155
 function main::action() {
-  local source_branch=${1:-main}
-  local target_branch=${2:-prod}
-  local development_branch=${3:-1:-}
+  local source=${1:-main}
+  local target=${2:-prod}
+  local development=${3:-1:-}
   local force_deploy=${4:-false}
   local deploy_successful_text=${5:-}
 
-  main::render_steps "$source_branch" "$development_branch"
+  main::render_steps "$source" "$target" "$development"
 
   echo -e "${COLOR_PURPLE}============================================${COLOR_RESET}"
   git fetch origin
   git status
   echo -e "${COLOR_BLUE}============================================${COLOR_RESET}"
 
-  echo -e "Using branch: ${COLOR_ORANGE}$source_branch${COLOR_RESET}"
-  validate::no_diff_between_local_and_origin "$source_branch" "$target_branch" "$force_deploy"
+  echo -e "Using source branch: ${COLOR_ORANGE}$source${COLOR_RESET}"
+  validate::no_diff_between_local_and_origin "$source" "$target" "$force_deploy"
 
-  local changed_files=$(git diff --name-only "$target_branch".."$source_branch")
+  local changed_files=$(git diff --name-only "$target".."$source")
   local latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0")
+
   echo -e "Current latest tag: ${COLOR_CYAN}$latest_tag${COLOR_RESET}"
   local new_tag=$(release::generate_new_tag "$latest_tag" "$changed_files")
-  main::compare_branch_with_target "$source_branch" "$target_branch" "$changed_files"
+  compare::source_with_target "$source" "$target"
 
-  io::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$target_branch${COLOR_RESET}" \
+  io::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$target${COLOR_RESET}" \
     "and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?"
-  main::force_checkout "$target_branch"
 
-  if [ -n "$changed_files" ]; then
-    echo -e "Merging ${COLOR_ORANGE}$source_branch${COLOR_RESET} release to ${COLOR_ORANGE}$target_branch${COLOR_RESET}"
-    if ! git merge "$source_branch"; then
-      echo -e "${COLOR_RED}Merge failed. Please resolve conflicts and try again.${COLOR_RESET}"
-      exit 1
-    fi
-  else
+  if [ -z "$changed_files" ]; then
     echo -e "${COLOR_YELLOW}No files changed between branches, skipping merge.${COLOR_RESET}"
     exit 0
   fi
 
-  git push origin "$target_branch" --no-verify
+  main::force_checkout "$target"
+  main::merge_source_to_target "$source" "$target"
 
   release::create_tag "$new_tag" "$changed_files"
   release::create_github_release "$latest_tag" "$new_tag"
 
-  echo -e "Merging ${COLOR_ORANGE}$target_branch${COLOR_RESET} back to" \
-    "${COLOR_ORANGE}$development_branch${COLOR_RESET} (increase the release contains hotfixes" \
-    "that are not in ${COLOR_ORANGE}$development_branch${COLOR_RESET})"
-
-  main::force_checkout "$development_branch"
-
-  git merge remotes/origin/"$target_branch"
-  git push origin "$development_branch" --no-verify
+  main::update_development "$development" "$target"
 
   echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
   if [ -n "$deploy_successful_text" ]; then
@@ -61,22 +49,61 @@ function main::action() {
 }
 
 function main::render_steps() {
-  local target_branch=$1
-  local development_branch=$2
+  local source=$1
+  local target=$1
+  local development=$2
 
   echo "This script will automate the release process and follow the following steps:"
   echo "- Fetch latest remote changes"
-  echo "- Select a branch to deploy"
-  echo "- Compare the branch with $target_branch to view the commits that will be deployed"
+  echo "- Select a branch to deploy: $source"
+  echo "- Compare the branch with $target to view the commits that will be deployed"
   echo "- Confirm you wish to proceed"
-  echo "- Merge the selected branch to $target_branch"
+  echo "- Merge the selected branch to $target"
   echo "- Create a tag and release"
-  echo "- Merge the selected branch back to $development_branch"
+  echo "- Merge the selected branch back to $development"
   echo ""
   echo "This script must use your local git environment."
 }
 
+function main::update_development() {
+  local development=$1
+  local target=$2
+
+  echo -e "Merging ${COLOR_ORANGE}$target${COLOR_RESET} back to" \
+    "${COLOR_ORANGE}$development${COLOR_RESET} (increase the release contains hotfixes" \
+    "that are not in ${COLOR_ORANGE}$development${COLOR_RESET})"
+
+  main::force_checkout "$development"
+  main::merge_source_to_target "remotes/origin/$target" "$development"
+
+}
+
+function main::merge_source_to_target() {
+  local source=$1
+  local target=$2
+
+  echo -e "Merging ${COLOR_ORANGE}$source${COLOR_RESET} release to ${COLOR_ORANGE}$target${COLOR_RESET}"
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping git merge ($source into $target)${COLOR_RESET}"
+    return
+  fi
+
+  if ! git merge "$source"; then
+    echo -e "${COLOR_RED}Merge failed. Please resolve conflicts and try again.${COLOR_RESET}"
+    exit 1
+  fi
+
+  git push origin "$target" --no-verify
+
+}
+
 function main::force_checkout() {
+  if [[ "$DRY_RUN" == true ]]; then
+    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping git checkout${COLOR_RESET}"
+    return
+  fi
+
   git config advice.detachedHead false
   [ -f .git/hooks/post-checkout ] && mv .git/hooks/post-checkout .git/hooks/post-checkout.bak
   git checkout -f origin/"$1"
