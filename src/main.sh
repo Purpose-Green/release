@@ -48,8 +48,8 @@ function main::render_steps() {
   local development=$2
 
   echo "This script will automate the release process and follow the following steps:"
+  echo "- Define the branch to deploy: $source"
   echo "- Fetch latest remote changes"
-  echo "- Select a branch to deploy: $source"
   echo "- Compare the branch with $target to view the commits that will be deployed"
   echo "- Confirm you wish to proceed"
   echo "- Merge the selected branch to $target"

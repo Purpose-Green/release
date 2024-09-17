@@ -39,6 +39,10 @@ while [[ $# -gt 0 ]]; do
     --dry-run)
       DRY_RUN=true
       ;;
+    --help)
+      console_header::print_help
+      exit 0
+      ;;
     -s|--source)
       SOURCE_BRANCH="$2"
       shift
