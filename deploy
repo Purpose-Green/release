@@ -70,7 +70,9 @@ export DRY_RUN
 main::action "$SOURCE_BRANCH" \
   "$TARGET_BRANCH" \
   "$DEVELOPMENT_BRANCH" \
-  "$FORCE_DEPLOY" \
-  "$DEPLOY_SUCCESSFUL_TEXT"
+  "$FORCE_DEPLOY"
 
-echo "Script finished successfully."
+echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
+if [ -n "$DEPLOY_SUCCESSFUL_TEXT" ]; then
+  echo -e "$DEPLOY_SUCCESSFUL_TEXT"
+fi

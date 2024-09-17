@@ -21,7 +21,7 @@ function release::create_tag() {
   local changed_files=$2
 
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping creating a tag ($new_tag)${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a tag ($new_tag)${COLOR_RESET}"
     return
   fi
 
@@ -46,7 +46,6 @@ function release::create_github_release() {
     previous_tag="main"
   fi
 
-  local commits=$(git log --oneline "$previous_tag".."$new_tag")
   local release_name=$(release::generate_release_name)
   local remote_url=$(git remote get-url origin)
   local repo_info=$(echo "$remote_url" | sed -E 's|git@github\.com:||; s|\.git$||')
@@ -55,9 +54,11 @@ function release::create_github_release() {
   local full_changelog="**Full Changelog**: $changelog_url"
 
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
     return
   fi
+
+  local commits=$(git log --oneline "$previous_tag".."$new_tag")
 
   gh release create "$new_tag" \
     --title "$release_name" \

@@ -7,14 +7,13 @@ function main::action() {
   local target=${2:-prod}
   local development=${3:-1:-}
   local force_deploy=${4:-false}
-  local deploy_successful_text=${5:-}
 
   main::render_steps "$source" "$target" "$development"
 
-  echo -e "${COLOR_PURPLE}============================================${COLOR_RESET}"
+  echo -e "${COLOR_PURPLE}------------------------------------------------------------------${COLOR_RESET}"
   git fetch origin
   git status
-  echo -e "${COLOR_BLUE}============================================${COLOR_RESET}"
+  echo -e "${COLOR_BLUE}------------------------------------------------------------------${COLOR_RESET}"
 
   echo -e "Using source branch: ${COLOR_ORANGE}$source${COLOR_RESET}"
   validate::no_diff_between_local_and_origin "$source" "$target" "$force_deploy"
@@ -41,11 +40,6 @@ function main::action() {
   release::create_github_release "$latest_tag" "$new_tag"
 
   main::update_development "$development" "$target"
-
-  echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
-  if [ -n "$deploy_successful_text" ]; then
-    echo -e "$deploy_successful_text"
-  fi
 }
 
 function main::render_steps() {
@@ -85,7 +79,7 @@ function main::merge_source_to_target() {
   echo -e "Merging ${COLOR_ORANGE}$source${COLOR_RESET} release to ${COLOR_ORANGE}$target${COLOR_RESET}"
 
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping git merge ($source into $target)${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping git merge ($source into $target)${COLOR_RESET}"
     return
   fi
 
@@ -100,7 +94,7 @@ function main::merge_source_to_target() {
 
 function main::force_checkout() {
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_YELLOW}--dry-run enabled. Skipping git checkout${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping git checkout${COLOR_RESET}"
     return
   fi
 

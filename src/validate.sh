@@ -24,7 +24,10 @@ your${COLOR_RESET} ${COLOR_ORANGE}$source${COLOR_RESET}."
       "of ${COLOR_ORANGE}origin/$source${COLOR_RESET}" \
       "by ${COLOR_RED}$ahead_commits${COLOR_RESET} commit(s)${COLOR_RESET}."
 
-    io::confirm_or_exit "${COLOR_YELLOW}Are you sure you want to push them" \
-      "to 'origin/$target' as part of the release?${COLOR_RESET}"
+    # shellcheck disable=SC2155
+    local question=$(echo "${COLOR_YELLOW}Are you sure you want to push them" \
+      "to 'origin/$target' as part of the release?${COLOR_RESET}")
+
+    io::confirm_or_exit "$question"
   fi
 }
