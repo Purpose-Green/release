@@ -25,8 +25,10 @@ function main::action() {
   local new_tag=$(release::generate_new_tag "$latest_tag" "$changed_files")
   compare::source_with_target "$source" "$target"
 
-  io::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$target${COLOR_RESET}" \
-    "and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?"
+  # shellcheck disable=SC2116
+  local question=$(echo "Force checkout ${COLOR_ORANGE}origin/$target${COLOR_RESET}" \
+    "and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?")
+  io::confirm_or_exit "$question"
 
   if [ -z "$changed_files" ]; then
     echo -e "${COLOR_YELLOW}No files changed between branches, skipping merge.${COLOR_RESET}"
