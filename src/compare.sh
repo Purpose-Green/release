@@ -1,11 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+# shellcheck disable=SC2005
 
 function main::compare_branch_with_target() {
   local source=$1
   local target=$2
-  local changed_files=$3
 
   echo -e "Comparing ${COLOR_ORANGE}$source${COLOR_RESET} with ${COLOR_ORANGE}$target${COLOR_RESET}"
   echo -e "${COLOR_BLUE}============================================${COLOR_RESET}"
@@ -26,7 +26,7 @@ function compare::render_changed_files() {
   local deleted_files=()
 
   # Collect files based on their status
-  while read status file; do
+  while read -r status file; do
       case "$status" in
           A) # Added (created)
               added_files+=("$file")

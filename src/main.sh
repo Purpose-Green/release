@@ -31,15 +31,13 @@ function main::action() {
 
   if [ -n "$changed_files" ]; then
     echo -e "Merging ${COLOR_ORANGE}$source_branch${COLOR_RESET} release to ${COLOR_ORANGE}$target_branch${COLOR_RESET}"
-    git merge "$source_branch"
+    if ! git merge "$source_branch"; then
+      echo -e "${COLOR_RED}Merge failed. Please resolve conflicts and try again.${COLOR_RESET}"
+      exit 1
+    fi
   else
     echo -e "${COLOR_YELLOW}No files changed between branches, skipping merge.${COLOR_RESET}"
     exit 0
-  fi
-
-  if [ $? -ne 0 ]; then
-    echo -e "${COLOR_RED}Merge failed. Please resolve conflicts and try again.${COLOR_RESET}"
-    exit 1
   fi
 
   git push origin "$target_branch" --no-verify
