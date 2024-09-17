@@ -1,0 +1,57 @@
+#!/bin/bash
+set -euo pipefail
+
+# shellcheck disable=SC2034
+declare -r DEPLOY_VERSION="0.1.0"
+
+DEPLOY_ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+export DEPLOY_ROOT_DIR
+
+source "$DEPLOY_ROOT_DIR/src/dev/debug.sh"
+source "$DEPLOY_ROOT_DIR/src/colors.sh"
+source "$DEPLOY_ROOT_DIR/src/env_configuration.sh"
+source "$DEPLOY_ROOT_DIR/src/main.sh"
+
+# Check if at least one argument (branch name) is passed
+if [ $# -lt 1 ]; then
+    echo "Usage: deploy [branch name] [--force (optional)]"
+    echo "Arguments"
+    echo "  branch name to deploy"
+    echo "Options"
+    echo "  --force ignore that your current branch as ahead commits"
+    echo ""
+    echo "Examples:
+- deploy main
+- deploy hotfix/...
+- deploy hotfix/... --force"
+    exit 1
+fi
+
+FORCE_DEPLOY=false
+SOURCE_BRANCH=$1
+
+while [[ $# -gt 0 ]]; do
+  argument="$1"
+  case $argument in
+    --debug)
+      set -x
+      ;;
+    -e|--env)
+      # shellcheck disable=SC1090
+      source "$2"
+      shift
+      ;;
+    -s|--source)
+      export SOURCE_BRANCH="$2"
+      shift
+      ;;
+    --force)
+      export FORCE_DEPLOY=true
+      ;;
+  esac
+  shift
+done
+
+main::action
+
+echo "Script finished successfully."

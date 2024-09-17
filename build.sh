@@ -26,7 +26,7 @@ function generate_bin() {
     } >> "$temp"
   done
 
-  cat entry-point >> "$temp"
+  cat deploy >> "$temp"
   grep -v '^source' "$temp" > "$out"
   rm "$temp"
   chmod u+x "$out"
