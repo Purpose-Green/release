@@ -25,7 +25,8 @@ function main::action() {
   local new_tag=$(release::generate_new_tag "$latest_tag" "$changed_files")
   main::compare_branch_with_target "$source_branch" "$target_branch" "$changed_files"
 
-  io::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$target_branch${COLOR_RESET} and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?"
+  io::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$target_branch${COLOR_RESET}" \
+    "and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?"
   main::force_checkout "$target_branch"
 
   if [ -n "$changed_files" ]; then
@@ -46,7 +47,10 @@ function main::action() {
   release::create_tag "$new_tag" "$changed_files"
   release::create_github_release "$latest_tag" "$new_tag"
 
-  echo -e "Merging ${COLOR_ORANGE}$target_branch${COLOR_RESET} back to ${COLOR_ORANGE}$development_branch${COLOR_RESET} (increase the release contains hotfixes that are not in ${COLOR_ORANGE}$development_branch${COLOR_RESET})"
+  echo -e "Merging ${COLOR_ORANGE}$target_branch${COLOR_RESET} back to" \
+    "${COLOR_ORANGE}$development_branch${COLOR_RESET} (increase the release contains hotfixes" \
+    "that are not in ${COLOR_ORANGE}$development_branch${COLOR_RESET})"
+
   main::force_checkout "$development_branch"
 
   git merge remotes/origin/"$target_branch"
@@ -68,10 +72,10 @@ function main::render_steps() {
   echo "- Compare the branch with $target_branch to view the commits that will be deployed"
   echo "- Confirm you wish to proceed"
   echo "- Merge the selected branch to $target_branch"
-  echo "- Create a release tag"
-  echo "- Merge the selected branch to $development_branch"
+  echo "- Create a tag and release"
+  echo "- Merge the selected branch back to $development_branch"
   echo ""
-  echo "This script must use your local git environment. If you suspect your current branch is not clean please quit this script now. "
+  echo "This script must use your local git environment."
 }
 
 function main::force_checkout() {
