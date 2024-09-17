@@ -17,7 +17,6 @@ function main::compare_branch_with_target() {
   echo -e "${COLOR_PURPLE}============================================${COLOR_RESET}"
 }
 
-
 function compare::render_changed_files() {
   local source=$1
   local target=$2
@@ -44,17 +43,24 @@ function compare::render_changed_files() {
   # Output the files, sorted by status
 
   # Added (created) files
-  for file in "${added_files[@]}"; do
-      echo -e "${COLOR_GREEN}+ $file${COLOR_RESET}"
-  done
+  if [ "${#added_files[@]}" -gt 0 ]; then
+    for file in "${added_files[@]}"; do
+        echo -e "${COLOR_GREEN}+ $file${COLOR_RESET}"
+    done
+  fi
 
   # Modified (updated) files
-  for file in "${modified_files[@]}"; do
-      echo -e "${COLOR_YELLOW}~ $file${COLOR_RESET}"
-  done
+  if [ "${#added_files[@]}" -gt 0 ]; then
+    for file in "${modified_files[@]}"; do
+        echo -e "${COLOR_YELLOW}~ $file${COLOR_RESET}"
+    done
+  fi
+
 
   # Deleted files
-  for file in "${deleted_files[@]}"; do
-      echo -e "${COLOR_RED}- $file${COLOR_RESET}"
-  done
+  if [ "${#added_files[@]}" -gt 0 ]; then
+    for file in "${deleted_files[@]}"; do
+        echo -e "${COLOR_RED}- $file${COLOR_RESET}"
+    done
+  fi
 }

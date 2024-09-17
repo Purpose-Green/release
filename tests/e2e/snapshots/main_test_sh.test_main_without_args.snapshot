@@ -1,1 +1,10 @@
-Main Action
+Usage: deploy [branch name] [--force (optional)]
+Arguments
+  branch name to deploy
+Options
+  --force ignore that your current branch as ahead commits
+
+Examples:
+- deploy main
+- deploy hotfix/...
+- deploy hotfix/... --force
