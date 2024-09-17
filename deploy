@@ -10,6 +10,7 @@ export DEPLOY_ROOT_DIR
 source "$DEPLOY_ROOT_DIR/src/dev/debug.sh"
 source "$DEPLOY_ROOT_DIR/src/colors.sh"
 source "$DEPLOY_ROOT_DIR/src/compare.sh"
+source "$DEPLOY_ROOT_DIR/src/console_header.sh"
 source "$DEPLOY_ROOT_DIR/src/env_configuration.sh"
 source "$DEPLOY_ROOT_DIR/src/io.sh"
 source "$DEPLOY_ROOT_DIR/src/release.sh"
@@ -18,23 +19,15 @@ source "$DEPLOY_ROOT_DIR/src/main.sh"
 
 # Check if at least one argument (branch name) is passed
 if [ $# -lt 1 ]; then
-    echo "Usage: deploy [branch name] [--force (optional)]"
-    echo "Arguments"
-    echo "  branch name to deploy"
-    echo "Options"
-    echo "  --force ignore that your current branch as ahead commits"
-    echo ""
-    echo "Examples:
-- deploy main
-- deploy hotfix/...
-- deploy hotfix/... --force"
-    exit 1
+  console_header::print_help
+  exit 1
 fi
 
 FORCE_DEPLOY=false
-SOURCE_BRANCH=$1
-TARGET_BRANCH=${2:-}
-DEVELOPMENT_BRANCH=${3:-}
+SOURCE_BRANCH=${SOURCE_BRANCH:-"main"}
+TARGET_BRANCH=${TARGET_BRANCH:-"prod"}
+DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-"main"}
+DEPLOY_SUCCESSFUL_TEXT=${DEPLOY_SUCCESSFUL_TEXT:-}
 DRY_RUN=${DRY_RUN:-false}
 
 while [[ $# -gt 0 ]]; do
@@ -45,11 +38,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     --dry-run)
       DRY_RUN=true
-      ;;
-    -e|--env)
-      # shellcheck disable=SC1090
-      source "$2"
-      shift
       ;;
     -s|--source)
       SOURCE_BRANCH="$2"
@@ -78,9 +66,6 @@ fi
 export GH_CLI_INSTALLED
 export DRY_RUN
 
-TARGET_BRANCH=${TARGET_BRANCH:-"prod"}
-DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-"main"}
-DEPLOY_SUCCESSFUL_TEXT=${DEPLOY_SUCCESSFUL_TEXT:-}
 
 main::action "$SOURCE_BRANCH" \
   "$TARGET_BRANCH" \
