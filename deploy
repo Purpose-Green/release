@@ -11,6 +11,7 @@ source "$DEPLOY_ROOT_DIR/src/dev/debug.sh"
 source "$DEPLOY_ROOT_DIR/src/colors.sh"
 source "$DEPLOY_ROOT_DIR/src/env_configuration.sh"
 source "$DEPLOY_ROOT_DIR/src/io.sh"
+source "$DEPLOY_ROOT_DIR/src/validate.sh"
 source "$DEPLOY_ROOT_DIR/src/main.sh"
 
 # Check if at least one argument (branch name) is passed

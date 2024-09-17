@@ -55,4 +55,4 @@ function generate_checksum() {
 OUT_DIR=${1:-"bin"}
 
 mkdir -p "$OUT_DIR"
-build "$OUT_DIR/entry-point"
+build "$OUT_DIR/deploy"
