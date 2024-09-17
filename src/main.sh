@@ -32,7 +32,7 @@ function main::action() {
   local new_tag=$(main::generate_new_tag "$latest_tag" "$changed_files")
   main::compare_branch_with_target "$SOURCE_BRANCH" "$TARGET_BRANCH" "$changed_files"
 
-  main::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$TARGET_BRANCH${COLOR_RESET} and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?"
+  io::confirm_or_exit "Force checkout ${COLOR_ORANGE}origin/$TARGET_BRANCH${COLOR_RESET} and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?"
   main::force_checkout "$TARGET_BRANCH"
 
   if [ -n "$changed_files" ]; then
@@ -62,17 +62,6 @@ function main::action() {
   echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
   if [ -n "$DEPLOY_SUCCESSFUL_TEXT" ]; then
     echo -e "${DEPLOY_SUCCESSFUL_TEXT}"
-  fi
-}
-
-function main::confirm_or_exit() {
-  # shellcheck disable=SC2155
-  local txt=$(echo -e "$1 (Y/n):")
-  read -p "$txt " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-    exit 1
   fi
 }
 
@@ -222,6 +211,6 @@ function main::validate_no_diff_between_local_and_origin() {
   fi
   if [[ "$ahead_commits" -gt 0 && "$FORCE_DEPLOY" == true ]]; then
     echo -e "Your local ${COLOR_ORANGE}$SOURCE_BRANCH${COLOR_RESET} is ahead of ${COLOR_ORANGE}origin/$SOURCE_BRANCH${COLOR_RESET} by ${COLOR_RED}$ahead_commits${COLOR_RESET} commit(s)${COLOR_RESET}."
-    main::confirm_or_exit "${COLOR_YELLOW}Are you sure you want to push them to 'origin/$target_branch' as part of the release?${COLOR_RESET}"
+    io::confirm_or_exit "${COLOR_YELLOW}Are you sure you want to push them to 'origin/$target_branch' as part of the release?${COLOR_RESET}"
   fi
 }
