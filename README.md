@@ -14,7 +14,7 @@ This script automates deployment using your local Git. It:
 
 ## How to use it?
 
-```bash
+```txt
 ./deploy --help
 Usage: deploy [arguments] [options]
 
@@ -27,6 +27,7 @@ Options:
   --debug              Enable debug mode (set -x).
   --dry-run            Simulate the deployment process without making any changes.
   --force              Ignore that your current local branch has ahead commits.
+  -v|-version          Display current version.
   -s, --source         Specify the source branch.
   -t, --target         Specify the target branch.
   -d, --development    Specify the development branch.
