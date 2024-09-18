@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # shellcheck disable=SC2034
-declare -r DEPLOY_VERSION="0.1.0"
+declare -r DEPLOY_VERSION="0.2.0"
 
 DEPLOY_ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 export DEPLOY_ROOT_DIR
