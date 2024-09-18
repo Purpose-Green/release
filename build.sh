@@ -26,7 +26,7 @@ function generate_bin() {
     } >> "$temp"
   done
 
-  cat deploy >> "$temp"
+  cat "$ENTRY_POINT" >> "$temp"
   grep -v '^source' "$temp" > "$out"
   rm "$temp"
   chmod u+x "$out"
@@ -99,6 +99,7 @@ function update_version() {
 #         MAIN         #
 ########################
 VERSION_VAR_NAME="DEPLOY_VERSION"
+ENTRY_POINT="deploy"
 OUT_DIR="bin"
 NEW_VERSION_TYPE=""
 
