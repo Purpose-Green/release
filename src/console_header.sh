@@ -2,7 +2,7 @@
 set -o allexport
 
 function console_header::print_version() {
-  printf "%s\n" "$(cat "$(dirname "${BASH_SOURCE[0]}")"/version.txt)"
+  printf "%s\n" "$DEPLOY_VERSION"
 }
 
 function console_header::print_help() {
