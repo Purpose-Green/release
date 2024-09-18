@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.1](https://github.com/Purpose-Green/deploy/compare/origin/prod...0.2.1) - 2024-09-18
+
+- 83a348a fix: console_header::print_version
+- 2a0f482 docs: update readme
+
 ## [0.2.0](https://github.com/Purpose-Green/deploy/compare/origin/prod...0.2.0) - 2024-09-18
 
 - 32d1c46 docs: update release notes
