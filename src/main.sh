@@ -71,7 +71,6 @@ function main::update_development() {
 
   main::force_checkout "$development"
   main::merge_source_to_target "remotes/origin/$target" "$development"
-
 }
 
 function main::merge_source_to_target() {
