@@ -1,6 +1,10 @@
 #!/bin/bash
 set -o allexport
 
+function console_header::print_version() {
+  printf "%s\n" "$DEPLOY_VERSION"
+}
+
 function console_header::print_help() {
   cat <<EOL
 Usage: deploy [arguments] [options]
