@@ -49,14 +49,23 @@ function generate_checksum() {
   echo "$checksum"
 }
 
+function get_current_version() {
+  local file_with_version=$1
+  grep "declare -r $VERSION_VAR_NAME=" "$file_with_version" \
+      | sed "s/declare -r $VERSION_VAR_NAME=\"\([0-9]*\.[0-9]*\.[0-9]*\)\"/\1/"
+}
+
 function update_version() {
   local version_type=$1
-  local version_file=$2
+  local file_with_version=$2
 
   local current_version
-  current_version=$(cat "$version_file")
+  current_version=$(grep "declare -r $VERSION_VAR_NAME=" "$file_with_version" \
+    | sed "s/declare -r $VERSION_VAR_NAME=\"\([0-9]*\.[0-9]*\.[0-9]*\)\"/\1/")
+
   IFS='.' read -r major minor patch <<< "$current_version"
 
+  # Increment the appropriate version part
   case "$version_type" in
     major)
       major=$((major + 1))
@@ -74,13 +83,22 @@ function update_version() {
   esac
 
   local new_version="$major.$minor.$patch"
-  echo "$new_version" > "$version_file"
-  echo "Version updated to $new_version"
+  local search_pattern="declare -r $VERSION_VAR_NAME=\"[0-9]*\.[0-9]*\.[0-9]*\""
+  local replace_pattern="declare -r $VERSION_VAR_NAME=\"$new_version\""
+
+  sed -i.bak \
+    "s/$search_pattern/$replace_pattern/" \
+    "$file_with_version"
+
+  rm "${file_with_version}.bak"
+
+  echo "$new_version"
 }
 
 ########################
 #         MAIN         #
 ########################
+VERSION_VAR_NAME="DEPLOY_VERSION"
 OUT_DIR="bin"
 NEW_VERSION_TYPE=""
 
@@ -99,7 +117,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$NEW_VERSION_TYPE" != "" ]]; then
-  update_version "$NEW_VERSION_TYPE" "src/version.txt"
+  echo "Updated version: $(update_version "$NEW_VERSION_TYPE" "deploy")"
+else
+  echo "Current version: $(get_current_version "deploy")"
 fi
 
 mkdir -p "$OUT_DIR"
