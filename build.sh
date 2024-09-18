@@ -95,6 +95,37 @@ function update_version() {
   echo "$new_version"
 }
 
+function update_changelog() {
+  local target_version=$1
+  local new_version=$2
+  local changelog_file="CHANGELOG.md"
+  local current_date
+  current_date=$(date +'%Y-%m-%d')
+
+  local commits
+  commits=$(git log "$target_version"..HEAD --oneline)
+
+  local temp_file
+  temp_file=$(mktemp)
+
+  # Add the new entry
+  {
+    echo "# Changelog"
+    echo
+    local url="https://github.com/Purpose-Green/deploy/compare/$target_version...$new_version"
+    echo "## [$new_version]($url) - $current_date"
+    echo
+    while IFS= read -r commit; do
+      echo "- $commit"
+    done <<< "$commits"
+    # Append existing changelog content
+    sed '1{/^# Changelog/d;}' "$changelog_file"
+  } > "$temp_file"
+
+  # Replace the original changelog with the updated one
+  mv "$temp_file" "$changelog_file"
+}
+
 ########################
 #         MAIN         #
 ########################
@@ -118,10 +149,12 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$NEW_VERSION_TYPE" != "" ]]; then
-  echo "Updated version: $(update_version "$NEW_VERSION_TYPE" "deploy")"
+  NEW_VERSION=$(update_version "$NEW_VERSION_TYPE" "$ENTRY_POINT")
+  echo "Updated version: $NEW_VERSION"
+  update_changelog "origin/prod" "$NEW_VERSION"
 else
-  echo "Current version: $(get_current_version "deploy")"
+  echo "Current version: $(get_current_version "$ENTRY_POINT")"
 fi
 
 mkdir -p "$OUT_DIR"
-build "$OUT_DIR/deploy"
+build "$OUT_DIR/$ENTRY_POINT"
