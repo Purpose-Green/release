@@ -43,6 +43,10 @@ while [[ $# -gt 0 ]]; do
       console_header::print_help
       exit 0
       ;;
+    -v|--version)
+      console_header::print_version
+      exit 0
+      ;;
     -s|--source)
       SOURCE_BRANCH="$2"
       shift
