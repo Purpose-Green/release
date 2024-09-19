@@ -2,8 +2,6 @@ Usage: release [arguments] [options]
 
 Arguments:
   source-branch        The branch name to release.
-  target-branch        The target branch to release to (optional, default: prod).
-  develop-branch       The develop branch (optional, default: main).
 
 Options:
   --debug               Enable debug mode (set -x)
@@ -12,8 +10,8 @@ Options:
   -h, --help            Print Help (this message) and exit
   -v, --version         Print version information and exit
   --source branch       Specify the source branch
-  --target branch       Specify the target branch
-  --develop branch      Specify the develop branch
+  --target branch       Specify the target branch (default: "prod")
+  --develop branch      Specify the develop branch (default: source-branch)
 
 Examples:
   release main

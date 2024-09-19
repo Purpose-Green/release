@@ -17,11 +17,15 @@ function release::generate_new_tag() {
 }
 
 function release::create_tag() {
-  local new_tag=$1
-  local changed_files=$2
+  local branch_name=$1
+  local branch_name="${1#origin/}"  # Remove 'origin/' prefix if present
+
+  local new_tag=$2
+  local changed_files=$3
 
   if [[ "$DRY_RUN" == true ]]; then
     echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a tag ($new_tag)${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping pushing changes ($branch_name)${COLOR_RESET}"
     return
   fi
 
@@ -30,7 +34,7 @@ function release::create_tag() {
 Changes:
 $changed_files"
 
-  git push origin --tags --no-verify
+  git push origin "$branch_name" --tags --no-verify
 }
 
 # shellcheck disable=SC2155

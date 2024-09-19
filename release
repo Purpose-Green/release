@@ -23,12 +23,12 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-FORCE_DEPLOY=false
-SOURCE_BRANCH=${SOURCE_BRANCH:-"main"}
+SOURCE_BRANCH=${1:-SOURCE_BRANCH:-"main"}
 TARGET_BRANCH=${TARGET_BRANCH:-"prod"}
 DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-"main"}
 DEPLOY_SUCCESSFUL_TEXT=${DEPLOY_SUCCESSFUL_TEXT:-}
 DRY_RUN=${DRY_RUN:-false}
+FORCE_DEPLOY=false
 
 while [[ $# -gt 0 ]]; do
   argument="$1"
@@ -73,7 +73,6 @@ fi
 
 export GH_CLI_INSTALLED
 export DRY_RUN
-
 
 main::action "$SOURCE_BRANCH" \
   "$TARGET_BRANCH" \

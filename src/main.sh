@@ -43,7 +43,7 @@ function main::action() {
   main::force_checkout "$target"
   main::merge_source_to_target "$source" "$target"
 
-  release::create_tag "$new_tag" "$changed_files"
+  release::create_tag "$target" "$new_tag" "$changed_files"
   release::create_github_release "$latest_tag" "$new_tag"
 
   main::update_develop "$develop" "$target"
@@ -80,7 +80,7 @@ function main::update_develop() {
     "that are not in ${COLOR_ORANGE}$develop${COLOR_RESET})"
 
   main::force_checkout "$develop"
-  main::merge_source_to_target "remotes/$target" "$develop"
+  main::merge_source_to_target "$target" "$develop"
 }
 
 function main::merge_source_to_target() {
@@ -116,9 +116,14 @@ function main::force_checkout() {
   [ -f .git/hooks/post-checkout ] && mv .git/hooks/post-checkout .git/hooks/post-checkout.bak
 
   git fetch origin
-  git checkout -f origin/"$branch_name"
-  git branch -D "$branch_name" 2>/dev/null
-  git checkout -b "$branch_name" origin/"$branch_name"
+
+  if git rev-parse --verify "$branch_name" >/dev/null 2>&1; then
+    # If branch exists locally, force checkout it
+    git checkout -f "$branch_name"
+  else
+    # If branch doesn't exist, create a new local branch from the remote
+    git checkout -b "$branch_name" origin/"$branch_name"
+  fi
 
   [ -f .git/hooks/post-checkout.bak ] && mv .git/hooks/post-checkout.bak .git/hooks/post-checkout
   git config advice.detachedHead true
