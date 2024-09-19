@@ -5,8 +5,13 @@ set -euo pipefail
 function main::action() {
   local source=${1:-main}
   local target=${2:-prod}
-  local develop=${3:-1:-}
+  local develop=${3:-1:-main}
   local force_release=${4:-false}
+
+  # Ensure 'origin/' prefix
+  if [[ $target != origin/* ]]; then
+    target="origin/$target"
+  fi
 
   main::render_steps "$source" "$target" "$develop"
 
@@ -26,7 +31,7 @@ function main::action() {
   compare::source_with_target "$source" "$target"
 
   # shellcheck disable=SC2116
-  local question=$(echo "Force checkout ${COLOR_ORANGE}origin/$target${COLOR_RESET}" \
+  local question=$(echo "Force checkout ${COLOR_ORANGE}$target${COLOR_RESET}" \
     "and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?")
   io::confirm_or_exit "$question"
 
@@ -59,6 +64,11 @@ function main::render_steps() {
   echo "- Merge the selected branch back to $develop"
   echo ""
   echo "This script must use your local git environment."
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo -e "${COLOR_YELLOW}--dry-run enabled${COLOR_RESET}"
+    return
+  fi
 }
 
 function main::update_develop() {
@@ -70,7 +80,7 @@ function main::update_develop() {
     "that are not in ${COLOR_ORANGE}$develop${COLOR_RESET})"
 
   main::force_checkout "$develop"
-  main::merge_source_to_target "remotes/origin/$target" "$develop"
+  main::merge_source_to_target "remotes/$target" "$develop"
 }
 
 function main::merge_source_to_target() {
@@ -94,16 +104,22 @@ function main::merge_source_to_target() {
 }
 
 function main::force_checkout() {
+  local branch_name="${1#origin/}"  # Remove 'origin/' prefix if present
+
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping git checkout${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping git fetch & checkout${COLOR_RESET}" \
+      "${COLOR_ORANGE}origin/$branch_name${COLOR_RESET}"
     return
   fi
 
   git config advice.detachedHead false
   [ -f .git/hooks/post-checkout ] && mv .git/hooks/post-checkout .git/hooks/post-checkout.bak
-  git checkout -f origin/"$1"
-  git branch -D "$1"
-  git checkout -b "$1" origin/"$1"
+
+  git fetch origin
+  git checkout -f origin/"$branch_name"
+  git branch -D "$branch_name" 2>/dev/null
+  git checkout -b "$branch_name" origin/"$branch_name"
+
   [ -f .git/hooks/post-checkout.bak ] && mv .git/hooks/post-checkout.bak .git/hooks/post-checkout
   git config advice.detachedHead true
 }

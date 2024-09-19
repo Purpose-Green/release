@@ -10,7 +10,7 @@ function compare::source_with_target() {
   echo -e "Comparing ${COLOR_ORANGE}$source${COLOR_RESET} with ${COLOR_ORANGE}$target${COLOR_RESET}"
   echo -e "${COLOR_BLUE}------------------------------------------------------------------${COLOR_RESET}"
   echo -e "Commits to include in the release (into ${COLOR_ORANGE}$target${COLOR_RESET}):"
-  echo "$(git log --color --oneline origin/"$target".."$source")"
+  echo "$(git log --color --oneline "$target".."$source")"
   echo -e "${COLOR_BLUE}------------------------------------------------------------------${COLOR_RESET}"
   echo -e "Changed files between '${COLOR_ORANGE}$target${COLOR_RESET}' and '${COLOR_ORANGE}$source${COLOR_RESET}':"
   compare::render_changed_files "$source" "$target"
