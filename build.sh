@@ -129,7 +129,7 @@ function update_changelog() {
 ########################
 #         MAIN         #
 ########################
-VERSION_VAR_NAME="DEPLOY_VERSION"
+VERSION_VAR_NAME="RELEASE_VERSION"
 ENTRY_POINT="release"
 OUT_DIR="bin"
 NEW_VERSION_TYPE=""

@@ -1,8 +1,8 @@
-# Deploy
+# Release
 
-This script automates deployment using your local Git. It:
+This script automates creating a release using your local Git. It:
 
-- Selects the branch to deploy (e.g., `main`)
+- Selects the branch to release (e.g., `main`)
 - Fetches the latest changes
 - Compares commits with the target branch
 - Prompts for confirmation
@@ -10,13 +10,13 @@ This script automates deployment using your local Git. It:
 - Tags and creates a release
 - Merges the branch back into the development branch
 
-> Run this script locally; deployment happens on the server.
+> Run this script locally; deployment happens on the server after the release is created.
 
 ## How to use it?
 
 ```txt
-./deploy --help
-Usage: deploy [arguments] [options]
+./release --help
+Usage: release [arguments] [options]
 
 Arguments:
   source-branch        The branch name to deploy.
@@ -27,7 +27,8 @@ Options:
   --debug              Enable debug mode (set -x).
   --dry-run            Simulate the deployment process without making any changes.
   --force              Ignore that your current local branch has ahead commits.
-  -v|--version         Display current version.
+  --help               Display this help text.
+  -v, --version         Display current version.
   -s, --source         Specify the source branch.
   -t, --target         Specify the target branch.
   -d, --development    Specify the development branch.
@@ -53,7 +54,7 @@ Examples:
 
 #### Source
 
-- The entry point of the script is `./deploy`
+- The entry point of the script is `./release`
 - The source code is `src/`, split by different script files storing isolated functions.
 - You can build the entire project and create a single executable script with `./build.sh`
 
