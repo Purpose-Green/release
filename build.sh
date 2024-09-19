@@ -112,7 +112,7 @@ function update_changelog() {
   {
     echo "# Changelog"
     echo
-    local url="https://github.com/Purpose-Green/deploy/compare/$target_version...$new_version"
+    local url="https://github.com/Purpose-Green/release/compare/$target_version...$new_version"
     echo "## [$new_version]($url) - $current_date"
     echo
     while IFS= read -r commit; do
@@ -130,7 +130,7 @@ function update_changelog() {
 #         MAIN         #
 ########################
 VERSION_VAR_NAME="DEPLOY_VERSION"
-ENTRY_POINT="deploy"
+ENTRY_POINT="release"
 OUT_DIR="bin"
 NEW_VERSION_TYPE=""
 
