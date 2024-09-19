@@ -36,10 +36,13 @@ while [[ $# -gt 0 ]]; do
     --debug)
       set -x
       ;;
-    --dry-run)
+    -d|--dry-run)
       DRY_RUN=true
       ;;
-    --help)
+    -f|--force)
+      FORCE_DEPLOY=true
+      ;;
+    -h|--help)
       console_header::print_help
       exit 0
       ;;
@@ -47,20 +50,17 @@ while [[ $# -gt 0 ]]; do
       console_header::print_version
       exit 0
       ;;
-    -s|--source)
+    --source)
       SOURCE_BRANCH="$2"
       shift
       ;;
-    -t|--target)
+    --target)
       TARGET_BRANCH="$2"
       shift
       ;;
-    -d|--development)
+    --develop)
       DEVELOPMENT_BRANCH="$2"
       shift
-      ;;
-    --force)
-      FORCE_DEPLOY=true
       ;;
   esac
   shift

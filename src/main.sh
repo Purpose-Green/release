@@ -5,10 +5,10 @@ set -euo pipefail
 function main::action() {
   local source=${1:-main}
   local target=${2:-prod}
-  local development=${3:-1:-}
-  local force_deploy=${4:-false}
+  local develop=${3:-1:-}
+  local force_release=${4:-false}
 
-  main::render_steps "$source" "$target" "$development"
+  main::render_steps "$source" "$target" "$develop"
 
   echo -e "${COLOR_PURPLE}------------------------------------------------------------------${COLOR_RESET}"
   git fetch origin
@@ -16,7 +16,7 @@ function main::action() {
   echo -e "${COLOR_BLUE}------------------------------------------------------------------${COLOR_RESET}"
 
   echo -e "Using source branch: ${COLOR_ORANGE}$source${COLOR_RESET}"
-  validate::no_diff_between_local_and_origin "$source" "$target" "$force_deploy"
+  validate::no_diff_between_local_and_origin "$source" "$target" "$force_release"
 
   local changed_files=$(git diff --name-only "$target".."$source")
   local latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0")
@@ -41,36 +41,36 @@ function main::action() {
   release::create_tag "$new_tag" "$changed_files"
   release::create_github_release "$latest_tag" "$new_tag"
 
-  main::update_development "$development" "$target"
+  main::update_develop "$develop" "$target"
 }
 
 function main::render_steps() {
   local source=$1
   local target=$1
-  local development=$2
+  local develop=$2
 
   echo "This script will automate the release process and follow the following steps:"
-  echo "- Define the branch to deploy: $source"
+  echo "- Define the branch to release: $source"
   echo "- Fetch latest remote changes"
-  echo "- Compare the branch with $target to view the commits that will be deployed"
+  echo "- Compare the branch with $target to view the commits that will be releaseed"
   echo "- Confirm you wish to proceed"
   echo "- Merge the selected branch to $target"
   echo "- Create a tag and release"
-  echo "- Merge the selected branch back to $development"
+  echo "- Merge the selected branch back to $develop"
   echo ""
   echo "This script must use your local git environment."
 }
 
-function main::update_development() {
-  local development=$1
+function main::update_develop() {
+  local develop=$1
   local target=$2
 
   echo -e "Merging ${COLOR_ORANGE}$target${COLOR_RESET} back to" \
-    "${COLOR_ORANGE}$development${COLOR_RESET} (increase the release contains hotfixes" \
-    "that are not in ${COLOR_ORANGE}$development${COLOR_RESET})"
+    "${COLOR_ORANGE}$develop${COLOR_RESET} (increase the release contains hotfixes" \
+    "that are not in ${COLOR_ORANGE}$develop${COLOR_RESET})"
 
-  main::force_checkout "$development"
-  main::merge_source_to_target "remotes/origin/$target" "$development"
+  main::force_checkout "$develop"
+  main::merge_source_to_target "remotes/origin/$target" "$develop"
 }
 
 function main::merge_source_to_target() {

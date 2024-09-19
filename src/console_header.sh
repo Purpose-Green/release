@@ -10,24 +10,24 @@ function console_header::print_help() {
 Usage: release [arguments] [options]
 
 Arguments:
-  source-branch        The branch name to deploy.
-  target-branch        The target branch to deploy to (optional, default: prod).
-  development-branch   The development branch (optional, default: main).
+  source-branch        The branch name to release.
+  target-branch        The target branch to release to (optional, default: prod).
+  develop-branch       The develop branch (optional, default: main).
 
 Options:
-  --debug              Enable debug mode (set -x).
-  --dry-run            Simulate the deployment process without making any changes.
-  --force              Ignore that your current local branch has ahead commits.
-  --help               Display this help text.
-  -v, --version         Display current version.
-  -s, --source         Specify the source branch.
-  -t, --target         Specify the target branch.
-  -d, --development    Specify the development branch.
+  --debug               Enable debug mode (set -x)
+  -d, --dry-run         Simulate the release process without making any changes
+  -f, --force           Ignore that your current local branch has ahead commits
+  -h, --help            Print Help (this message) and exit
+  -v, --version         Print version information and exit
+  --source branch       Specify the source branch
+  --target branch       Specify the target branch
+  --develop branch      Specify the develop branch
 
 Examples:
-  deploy main
-  deploy main --dry-run
-  deploy fix/... --force
-  deploy fix/... --dry-run --force
+  release main
+  release main --dry-run
+  release fix/... --force
+  release fix/... --dry-run --force
 EOL
 }
