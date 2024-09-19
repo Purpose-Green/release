@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function set_up() {
-  SCRIPT="$(current_dir)/../../deploy"
+  SCRIPT="$(current_dir)/../../release"
 }
 
 function test_main_without_args() {

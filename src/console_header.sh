@@ -2,12 +2,12 @@
 set -o allexport
 
 function console_header::print_version() {
-  printf "%s\n" "$DEPLOY_VERSION"
+  printf "%s\n" "$RELEASE_VERSION"
 }
 
 function console_header::print_help() {
   cat <<EOL
-Usage: deploy [arguments] [options]
+Usage: release [arguments] [options]
 
 Arguments:
   source-branch        The branch name to deploy.
@@ -18,7 +18,8 @@ Options:
   --debug              Enable debug mode (set -x).
   --dry-run            Simulate the deployment process without making any changes.
   --force              Ignore that your current local branch has ahead commits.
-  -v|--version         Display current version.
+  --help               Display this help text.
+  -v, --version         Display current version.
   -s, --source         Specify the source branch.
   -t, --target         Specify the target branch.
   -d, --development    Specify the development branch.
