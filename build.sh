@@ -69,9 +69,12 @@ function update_version() {
   case "$version_type" in
     major)
       major=$((major + 1))
+      minor=0
+      patch=0
       ;;
     minor)
       minor=$((minor + 1))
+      patch=0
       ;;
     patch)
       patch=$((patch + 1))
@@ -95,25 +98,27 @@ function update_version() {
   echo "$new_version"
 }
 
+# shellcheck disable=SC2155
 function update_changelog() {
   local target_version=$1
   local new_version=$2
+  local new_tag=$2
+
   local changelog_file="CHANGELOG.md"
-  local current_date
-  current_date=$(date +'%Y-%m-%d')
+  local current_date=$(date +'%Y-%m-%d')
+  local previous_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0")
+  local remote_url=$(git remote get-url origin)
+  local repo_info=$(echo "$remote_url" | sed -E 's|git@github\.com:||; s|\.git$||')
+  local changelog_url="https://github.com/$repo_info/compare/$previous_tag...$new_tag"
 
-  local commits
-  commits=$(git log "$target_version"..HEAD --oneline)
+  local commits=$(git log "$target_version"..HEAD --oneline)
 
-  local temp_file
-  temp_file=$(mktemp)
-
+  local temp_file=$(mktemp)
   # Add the new entry
   {
     echo "# Changelog"
     echo
-    local url="https://github.com/Purpose-Green/release/compare/$target_version...$new_version"
-    echo "## [$new_version]($url) - $current_date"
+    echo "## [$new_version]($changelog_url) - $current_date"
     echo
     while IFS= read -r commit; do
       echo "- $commit"
