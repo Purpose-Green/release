@@ -64,7 +64,7 @@ function release::create_github_release() {
 
   if [[ "$DRY_RUN" == true ]]; then
     echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
-    return
+#    return
   fi
 
   if [[ "$DRY_RUN" == true ]]; then
@@ -80,6 +80,8 @@ function release::create_github_release() {
       --notes "$notes"
   fi
 
+  local repo_name=$(echo "$repo_info" | cut -d'/' -f2)
+
   local slack_message=$(cat <<EOF
 {
   "blocks": [
@@ -87,10 +89,7 @@ function release::create_github_release() {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*New release created:*\n
-                 *Release:* $release_name\n
-                 *Commits:*\n$commits\n
-                 *Changelog:*\n$full_changelog"
+        "text": "*$repo_name* :rocket: $release_name\n\n$commits\n<$changelog_url|Full changelog>"
       }
     }
   ]
