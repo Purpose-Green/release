@@ -79,9 +79,7 @@ function release::create_github_release() {
       --notes "$notes"
   fi
 
-  if [[ -n $SLACK_CHANNEL_ID && -n $SLACK_OAUTH_TOKEN ]]; then
-    slack::notify "$repo_info" "$release_name" "$changelog_url" "$commits"
-  fi
+  slack::notify "$repo_info" "$release_name" "$changelog_url" "$commits"
 }
 
 # shellcheck disable=SC2155
