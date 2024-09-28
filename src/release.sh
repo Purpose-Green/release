@@ -81,8 +81,18 @@ function release::create_github_release() {
   fi
 
   if [[ -n $SLACK_CHANNEL_ID && -n $SLACK_OAUTH_TOKEN ]]; then
-    local repo_name=$(echo "$repo_info" | cut -d'/' -f2)
+    release::notify_via_slack "$repo_info" "$release_name" "$changelog_url" "$commits"
+  fi
+}
 
+# shellcheck disable=SC2155
+function release::notify_via_slack() {
+  local repo_info=$1
+  local release_name=$2
+  local changelog_url=$3
+  local commits=$4
+
+    local repo_name=$(echo "$repo_info" | cut -d'/' -f2)
     local slack_message=$(cat <<EOF
 [
   {
@@ -95,17 +105,16 @@ function release::create_github_release() {
 ]
 EOF
 )
-    # Escaping quotes and newlines
-    local slack_message_escaped="${slack_message//\"/\\\"}"
-    slack_message_escaped="${slack_message_escaped//$'\n'/\\n}"
+  # Escaping quotes and newlines
+  local slack_message_escaped="${slack_message//\"/\\\"}"
+  slack_message_escaped="${slack_message_escaped//$'\n'/\\n}"
 
-    curl -s -o /dev/null -X POST https://slack.com/api/chat.postMessage \
-      -H "Content-Type: application/json; charset=utf-8" \
-      -H "Authorization: Bearer $SLACK_OAUTH_TOKEN" \
-      --data "{\"channel\": \"$SLACK_CHANNEL_ID\", \"blocks\": \"$slack_message_escaped\"}"
+  curl -s -o /dev/null -X POST https://slack.com/api/chat.postMessage \
+    -H "Content-Type: application/json; charset=utf-8" \
+    -H "Authorization: Bearer $SLACK_OAUTH_TOKEN" \
+    --data "{\"channel\": \"$SLACK_CHANNEL_ID\", \"blocks\": \"$slack_message_escaped\"}"
 
-    echo -e "${COLOR_GREEN}Notification sent via slack${COLOR_RESET}"
-  fi
+  echo -e "${COLOR_GREEN}Notification sent via slack${COLOR_RESET}"
 }
 
 # shellcheck disable=SC2155
