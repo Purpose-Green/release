@@ -63,6 +63,7 @@ function main::render_steps() {
   echo "- Confirm you wish to proceed"
   echo "- Merge the selected branch to $target"
   echo "- Create a tag and release"
+  echo "- Notify via slack that a new release was created"
   echo "- Merge the selected branch back to $develop"
   echo ""
   echo "This script must use your local git environment."
