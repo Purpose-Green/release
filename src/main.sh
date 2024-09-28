@@ -8,6 +8,8 @@ function main::action() {
   local develop=${3:-1:-main}
   local force_release=${4:-false}
 
+  validate::slack_configured "$force_release"
+
   # Ensure 'origin/' prefix
   if [[ $target != origin/* ]]; then
     target="origin/$target"
