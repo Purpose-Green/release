@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/Purpose-Green/release/compare/v6...v7) - 2024-09-28
+
+- d6a1dbd feat: add slack integration using slack api chat.postMessage
+- 975b90f add .env to ignore. Commit .env.dist instead
+- e427e92 deps: use bashunit:beta
+- f26aa8d fix: support http remote to build full changelog url
+
 ## [0.3.0](https://github.com/Purpose-Green/release/compare/v5...v6) - 2024-09-19
 
 - 5952a9e fix: release::create_tag
