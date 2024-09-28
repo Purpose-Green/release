@@ -63,10 +63,6 @@ function release::create_github_release() {
   local full_changelog="**Full Changelog**: $changelog_url"
 
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
-  fi
-
-  if [[ "$DRY_RUN" == true ]]; then
     new_tag=main
   fi
 
@@ -77,6 +73,8 @@ function release::create_github_release() {
     gh release create "$new_tag" \
       --title "$release_name" \
       --notes "$notes"
+  else
+    echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
   fi
 
   slack::notify "$repo_info" "$release_name" "$changelog_url" "$commits"
