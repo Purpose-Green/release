@@ -50,6 +50,14 @@ Examples:
 
 ## Development
 
+#### Env
+
+Make sure you have .env ready to use.
+
+```bash
+cp .env.dist .env
+```
+
 #### Source
 
 - The entry point of the script is `./release`
