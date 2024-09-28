@@ -57,7 +57,7 @@ function main::render_steps() {
   echo "This script will automate the release process and follow the following steps:"
   echo "- Define the branch to release: $source"
   echo "- Fetch latest remote changes"
-  echo "- Compare the branch with $target to view the commits that will be releaseed"
+  echo "- Compare the branch with $target to view the commits that will be released"
   echo "- Confirm you wish to proceed"
   echo "- Merge the selected branch to $target"
   echo "- Create a tag and release"

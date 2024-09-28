@@ -52,7 +52,12 @@ function release::create_github_release() {
 
   local release_name=$(release::generate_release_name)
   local remote_url=$(git remote get-url origin)
-  local repo_info=$(echo "$remote_url" | sed -E 's|git@github\.com:||; s|\.git$||')
+  # Handle both SSH and HTTPS URLs
+  local repo_info=$(echo "$remote_url" | sed -E \
+      -e 's|git@github\.com:|github.com/|' \
+      -e 's|https://||' \
+      -e 's|github.com/||' \
+      -e 's|\.git$||')
 
   local changelog_url="https://github.com/$repo_info/compare/$previous_tag...$new_tag"
   local full_changelog="**Full Changelog**: $changelog_url"
