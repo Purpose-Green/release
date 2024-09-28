@@ -67,18 +67,41 @@ function release::create_github_release() {
     return
   fi
 
+  if [[ "$DRY_RUN" == true ]]; then
+    new_tag=main
+  fi
+
   local commits=$(git log --oneline "$previous_tag".."$new_tag")
   local notes=$(echo -e "$commits\n\n$full_changelog")
 
-  gh release create "$new_tag" \
-    --title "$release_name" \
-    --notes "$notes"
+  if [[ "$DRY_RUN" == false ]]; then
+    gh release create "$new_tag" \
+      --title "$release_name" \
+      --notes "$notes"
+  fi
 
+  local slack_message=$(cat <<EOF
+{
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*New release created:*\n
+                 *Release:* $release_name\n
+                 *Commits:*\n$commits\n
+                 *Changelog:*\n$full_changelog"
+      }
+    }
+  ]
+}
+EOF
+)
   if [[ -n $SLACK_CHANNEL_ID && -n $SLACK_OAUTH_TOKEN ]]; then
-    curl -d "text=New release created: $release_name\n$notes" \
-      -d "channel=$SLACK_CHANNEL_ID" \
+    curl -X POST https://slack.com/api/chat.postMessage \
       -d "token=$SLACK_OAUTH_TOKEN" \
-      -X POST https://slack.com/api/chat.postMessage
+      -d "channel=$SLACK_CHANNEL_ID" \
+      -d "blocks=$slack_message"
   fi
 }
 
