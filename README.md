@@ -9,6 +9,7 @@ This script automates creating a release using your local Git. It:
 - Merges the branch
 - Tags and creates a release
 - Merges the branch back into the development branch
+- Share the changelog via Slack
 
 > Run this script locally; deployment happens on the server after the release is created.
 

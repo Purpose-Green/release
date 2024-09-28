@@ -68,10 +68,18 @@ function release::create_github_release() {
   fi
 
   local commits=$(git log --oneline "$previous_tag".."$new_tag")
+  local notes=$(echo -e "$commits\n\n$full_changelog")
 
   gh release create "$new_tag" \
     --title "$release_name" \
-    --notes "$(echo -e "$commits\n\n$full_changelog")"
+    --notes "$notes"
+
+  if [[ -n $SLACK_CHANNEL_ID && -n $SLACK_OAUTH_TOKEN ]]; then
+    curl -d "text=New release created: $release_name\n$notes" \
+      -d "channel=$SLACK_CHANNEL_ID" \
+      -d "token=$SLACK_OAUTH_TOKEN" \
+      -X POST https://slack.com/api/chat.postMessage
+  fi
 }
 
 # shellcheck disable=SC2155
