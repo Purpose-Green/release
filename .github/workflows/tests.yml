@@ -18,9 +18,9 @@ jobs:
           - macos-latest
         include:
           - os: ubuntu-latest
-            script_name: 'make test'
+            script_name: 'lib/bashunit -e .env.dist'
           - os: macos-latest
-            script_name: 'make test'
+            script_name: 'lib/bashunit -e .env.dist'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
