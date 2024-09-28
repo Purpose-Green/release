@@ -15,6 +15,7 @@ source "$RELEASE_ROOT_DIR/src/env_configuration.sh"
 source "$RELEASE_ROOT_DIR/src/io.sh"
 source "$RELEASE_ROOT_DIR/src/release.sh"
 source "$RELEASE_ROOT_DIR/src/validate.sh"
+source "$RELEASE_ROOT_DIR/src/slack.sh"
 source "$RELEASE_ROOT_DIR/src/main.sh"
 
 # Check if at least one argument (branch name) is passed
