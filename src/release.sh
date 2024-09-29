@@ -67,12 +67,11 @@ function release::create_github_release() {
   fi
 
   local commits=$(git log --oneline "$previous_tag".."$new_tag")
-  local notes=$(echo -e "$commits\n\n$full_changelog")
 
   if [[ "$DRY_RUN" == false ]]; then
     gh release create "$new_tag" \
       --title "$release_name" \
-      --notes "$notes"
+      --notes "$(echo -e "$commits\n\n$full_changelog")"
   else
     echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
   fi
