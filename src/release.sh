@@ -76,7 +76,7 @@ function release::create_github_release() {
     echo -e "${COLOR_CYAN}--dry-run enabled. Skipping creating a release ($release_name)${COLOR_RESET}"
   fi
 
-  slack::notify "$repo_info" "$release_name" "$changelog_url" "$commits"
+  slack::notify "$repo_info" "$release_name" "$changelog_url" "$commits" "$new_tag"
 }
 
 # shellcheck disable=SC2155
