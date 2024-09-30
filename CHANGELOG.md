@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.1](https://github.com/Purpose-Green/release/compare/v7...v8) - 2024-09-30
+
+- ec2e1e5 add release url to the release name in slack msg
+- 87c38dc refactor: inline notes variable when creating gh release
+
 ## [0.4.0](https://github.com/Purpose-Green/release/compare/v6...v7) - 2024-09-28
 
 - d6a1dbd feat: add slack integration using slack api chat.postMessage
