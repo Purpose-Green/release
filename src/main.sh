@@ -1,7 +1,7 @@
 #!/bin/bash
+# shellcheck disable=SC2155
 set -euo pipefail
 
-# shellcheck disable=SC2155
 function main::action() {
   local source=${1:-main}
   local target=${2:-prod}
@@ -42,6 +42,8 @@ function main::action() {
     exit 0
   fi
 
+  main::extra_confirmation_texts "$changed_files"
+
   main::force_checkout "$target"
   main::merge_source_to_target "$source" "$target"
 
@@ -49,6 +51,29 @@ function main::action() {
   release::create_github_release "$latest_tag" "$new_tag"
 
   main::update_develop "$develop" "$target"
+}
+
+function main::extra_confirmation_texts() {
+  local changed_files=$1
+
+  if [[ -z "${RELEASE_EXTRA_CONFIRMATION:-}" ]]; then
+    return 0
+  fi
+
+  local confirmation_msg filepath
+  while IFS= read -r filepath; do
+    confirmation_msg=$(json::parse_text "$RELEASE_EXTRA_CONFIRMATION" "$filepath")
+    if [[ -n "$confirmation_msg" ]]; then
+      break
+    fi
+  done <<< "$changed_files"
+
+  if [[ -n "$confirmation_msg" ]]; then
+    echo "Psst, due to '$filepath'..."
+    # shellcheck disable=SC2116
+    local question="$(echo "${COLOR_RED}$confirmation_msg${COLOR_RESET}")"
+    io::confirm_or_exit "$question"
+  fi
 }
 
 function main::render_steps() {
