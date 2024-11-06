@@ -7,7 +7,7 @@ declare -r RELEASE_VERSION="0.4.1"
 RELEASE_ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 export RELEASE_ROOT_DIR
 
-source "$RELEASE_ROOT_DIR/src/dev/debug.sh"
+source "$RELEASE_ROOT_DIR/src/dev/dumper.sh"
 source "$RELEASE_ROOT_DIR/src/colors.sh"
 source "$RELEASE_ROOT_DIR/src/compare.sh"
 source "$RELEASE_ROOT_DIR/src/console_header.sh"

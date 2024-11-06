@@ -12,9 +12,10 @@
 DEPENDENCIES=(
   "https://github.com/TypedDevs/bashunit/releases/download/0.18.0/bashunit"
   "https://github.com/Chemaclass/create-pr/releases/download/0.8.0/create-pr"
+  "https://github.com/Chemaclass/bash-dumper/releases/download/0.1/dumper.sh@dev"
 )
 
 # Load, configure and run bashdep
 source lib/bashdep
-bashdep::setup dir="lib" silent=false
+bashdep::setup dir="lib" dev-dir="src/dev" silent=false
 bashdep::install "${DEPENDENCIES[@]}"
