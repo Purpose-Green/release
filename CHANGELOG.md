@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.5.0](https://github.com/Purpose-Green/release/compare/v8...v9) - 2024-11-06
 
 - Use [bashdep](https://github.com/Chemaclass/bashdep) to install dependencies
 - Add `RELEASE_EXTRA_CONFIRMATION` to force asking for a new dialog when a filepath is found on such a key.

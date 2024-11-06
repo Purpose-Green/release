@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # shellcheck disable=SC2034
-declare -r RELEASE_VERSION="0.4.1"
+declare -r RELEASE_VERSION="0.5.0"
 
 RELEASE_ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 export RELEASE_ROOT_DIR
