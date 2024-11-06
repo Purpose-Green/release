@@ -60,7 +60,7 @@ function main::extra_confirmation_texts() {
     return 0
   fi
 
-  local confirmation_msg
+  local confirmation_msg filepath
   while IFS= read -r filepath; do
     confirmation_msg=$(json::parse_text "$RELEASE_EXTRA_CONFIRMATION" "$filepath")
     if [[ -n "$confirmation_msg" ]]; then
@@ -69,6 +69,7 @@ function main::extra_confirmation_texts() {
   done <<< "$changed_files"
 
   if [[ -n "$confirmation_msg" ]]; then
+    echo "Psst, due to '$filepath'..."
     # shellcheck disable=SC2116
     local question="$(echo "${COLOR_RED}$confirmation_msg${COLOR_RESET}")"
     io::confirm_or_exit "$question"
