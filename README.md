@@ -39,16 +39,6 @@ Examples:
   release fix/... --dry-run --force
 ```
 
-## Demo
-
-### Using --dry-run
-
-![](demo/using-dry-run.gif)
-
-### Creating a new release
-
-![](demo/creating-release.gif)
-
 ## Env variables
 
 ### RELEASE_SUCCESSFUL_TEXT
@@ -64,6 +54,16 @@ Force asking for a new dialog when a filepath is found on such a key.
 The value is the question forced to be asked. It must be [y/Y] to continue the release.
 
 > Example: RELEASE_EXTRA_CONFIRMATION='{"migrations": "Migrations found! Remember to create a DB backup!"}'
+
+## Demo
+
+### Using --dry-run
+
+![](demo/using-dry-run.gif)
+
+### Creating a new release
+
+![](demo/creating-release.gif)
 
 ## Development
 
