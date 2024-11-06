@@ -49,6 +49,22 @@ Examples:
 
 ![](demo/creating-release.gif)
 
+## Env variables
+
+### RELEASE_SUCCESSFUL_TEXT
+
+Display a text at the very end of the release.
+Useful to have a link directly to the releases page to validate everything was good.
+
+> Example: RELEASE_SUCCESSFUL_TEXT=https://github.com/Purpose-Green/release/releases
+
+### RELEASE_EXTRA_CONFIRMATION
+
+Force asking for a new dialog when a filepath is found on such a key.
+The value is the question forced to be asked. It must be [y/Y] to continue the release.
+
+> Example: RELEASE_EXTRA_CONFIRMATION='{"migrations": "Migrations found! Remember to create a DB backup!"}'
+
 ## Development
 
 #### Env
