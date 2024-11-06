@@ -1,8 +1,20 @@
 #!/bin/bash
 
-## bashunit
-curl -s https://bashunit.typeddevs.com/install.sh | bash -s lib beta
+# Ensure bashdep is installed
+[ ! -f lib/bashdep ] && {
+  mkdir -p lib
+  curl -sLo lib/bashdep \
+    https://github.com/Chemaclass/bashdep/releases/download/0.1/bashdep
+  chmod +x lib/bashdep
+}
 
-## create-pr
-curl -L https://github.com/Chemaclass/create-pr/releases/download/0.6/create-pr -o lib/create-pr
-chmod +x lib/create-pr
+# Add latest bashunit release to your dependencies
+DEPENDENCIES=(
+  "https://github.com/TypedDevs/bashunit/releases/download/0.18.0/bashunit"
+  "https://github.com/Chemaclass/create-pr/releases/download/0.8.0/create-pr"
+)
+
+# Load, configure and run bashdep
+source lib/bashdep
+bashdep::setup dir="lib" silent=false
+bashdep::install "${DEPENDENCIES[@]}"

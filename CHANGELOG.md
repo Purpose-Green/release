@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Use [bashdep](https://github.com/Chemaclass/bashdep) to install dependencies
+
 ## [0.4.1](https://github.com/Purpose-Green/release/compare/v7...v8) - 2024-09-30
 
 - ec2e1e5 add release url to the release name in slack msg
