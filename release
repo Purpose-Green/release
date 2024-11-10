@@ -11,7 +11,7 @@ source "$RELEASE_ROOT_DIR/src/dev/dumper.sh"
 source "$RELEASE_ROOT_DIR/src/colors.sh"
 source "$RELEASE_ROOT_DIR/src/compare.sh"
 source "$RELEASE_ROOT_DIR/src/console_header.sh"
-source "$RELEASE_ROOT_DIR/src/env_configuration.sh"
+source "$RELEASE_ROOT_DIR/src/env.sh"
 source "$RELEASE_ROOT_DIR/src/io.sh"
 source "$RELEASE_ROOT_DIR/src/release.sh"
 source "$RELEASE_ROOT_DIR/src/validate.sh"
@@ -82,6 +82,4 @@ main::action "$SOURCE_BRANCH" \
   "$FORCE_DEPLOY"
 
 echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
-if [ -n "$RELEASE_SUCCESSFUL_TEXT" ]; then
-  echo -e "$RELEASE_SUCCESSFUL_TEXT"
-fi
+env::render_successful_text
