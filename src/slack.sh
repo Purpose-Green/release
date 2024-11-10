@@ -2,9 +2,9 @@
 
 # shellcheck disable=SC2155
 function slack::notify() {
-  if [[ -z "${SLACK_CHANNEL_ID:-}" || -z "${SLACK_OAUTH_TOKEN:-}" ]]; then
+  if [[ -z "${RELEASE_SLACK_CHANNEL_ID:-}" || -z "${RELEASE_SLACK_OAUTH_TOKEN:-}" ]]; then
     echo -e "${COLOR_CYAN}Slack configuration missing." \
-      "Check your .env for SLACK_CHANNEL_ID & SLACK_OAUTH_TOKEN${COLOR_RESET}"
+      "Check your .env for RELEASE_SLACK_CHANNEL_ID & RELEASE_SLACK_OAUTH_TOKEN${COLOR_RESET}"
     return
   fi
 
@@ -22,7 +22,7 @@ function slack::notify() {
 
   local slack_message=$(cat <<EOF
 {
-  "channel": "$SLACK_CHANNEL_ID",
+  "channel": "$RELEASE_SLACK_CHANNEL_ID",
   "unfurl_links": false,
   "unfurl_media": false,
   "blocks": [

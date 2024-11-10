@@ -41,45 +41,67 @@ Examples:
 
 ## Env variables
 
-### RELEASE_SOURCE_BRANCH
+> Note: you can (optionally) use `RELEASE_` as prefix for all env keys.
+> Useful if you want to distinguish visually the origin of that env key-value.
+> Eg: Using `SOURCE_BRANCH` will be equivalent to `RELEASE_SOURCE_BRANCH`.
+
+### BRANCHES
+
+#### SOURCE_BRANCH
 
 The default source branch that you want to use for your releases.
 
 > Default: `main`
 
-### RELEASE_TARGET_BRANCH
+#### TARGET_BRANCH
 
 The default target branch that you want to use for your releases.
 
 > Default: `prod`
 
-### RELEASE_DEVELOPMENT_BRANCH
+#### DEVELOPMENT_BRANCH
 
 If you have a different develop branch from the source branch, you can also define it here.
 
 > Default: `main`
 
-### RELEASE_SUCCESSFUL_TEXT
+### SLACK
 
-Display a text at the very end of the release.
-Useful to have a link directly to the releases page to validate everything was good.
+#### SLACK_CHANNEL_ID
 
-> Example: RELEASE_SUCCESSFUL_TEXT=https://github.com/Purpose-Green/release/releases
+The Slack channel ID where to publish the changelog message.
 
-### RELEASE_EXTRA_CONFIRMATION
+> Example: SLACK_CHANNEL_ID=#your-channel
+
+#### SLACK_OAUTH_TOKEN
+
+The Slack oauth token with the right of writing into your channel.
+
+> Example: SLACK_CHANNEL_ID=xoxb-123-456-ABC789
+
+### EXTRA
+
+#### EXTRA_CONFIRMATION
 
 Force asking for a new dialog when a filepath is found on such a directly (the key).
 The value is the question forced to be asked. It must be [y/Y] to continue the release.
 
-> Example: RELEASE_EXTRA_CONFIRMATION='{"migrations": "Migrations found! Remember to create a DB backup!"}'
+> Example: EXTRA_CONFIRMATION='{"migrations": "Migrations found! Remember to create a DB backup!"}'
 
-### RELEASE_EXTRA_RUN_COMMANDS
+#### EXTRA_RUN_COMMANDS
 
 Run a command when a filepath is found on such a directory (the key).
 The commands will be executed only once, even if multiple files are affected.
 How? After running a command, this will be saved on memory to avoid running the same command twice.
 
-> Example: RELEASE_EXTRA_RUN_COMMANDS='{"migrations": "api_call_to_create_DB_backup"}'
+> Example: EXTRA_RUN_COMMANDS='{"migrations": "api_call_to_create_DB_backup"}'
+
+### SUCCESSFUL_TEXT
+
+Display a text at the very end of the release.
+Useful to have a link directly to the releases page to validate everything was good.
+
+> Example: SUCCESSFUL_TEXT=https://github.com/Purpose-Green/release/releases
 
 ## Demo
 
