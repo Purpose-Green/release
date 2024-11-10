@@ -44,7 +44,7 @@ EOF
 
   curl -X POST https://slack.com/api/chat.postMessage \
     -H "Content-Type: application/json; charset=utf-8" \
-    -H "Authorization: Bearer $SLACK_OAUTH_TOKEN" \
+    -H "Authorization: Bearer $RELEASE_SLACK_OAUTH_TOKEN" \
     --data "$slack_message" \
     -s -o /tmp/slack-error.log
 
