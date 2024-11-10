@@ -60,6 +60,7 @@ function mock() {
 
   export -f "${command?}"
 
+  # shellcheck disable=SC2005
   echo "$(declare -f "$command")" >> /tmp/mocks.sh
   chmod +x /tmp/mocks.sh
   trap 'rm -f /tmp/mocks.sh' EXIT
