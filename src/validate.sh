@@ -41,21 +41,21 @@ function validate::slack_configured() {
   fi
 
   # Check if SLACK_CHANNEL_ID and SLACK_OAUTH_TOKEN are set, and exit if they are missing
-  if [[ -z "${SLACK_CHANNEL_ID:-}" || -z "${SLACK_OAUTH_TOKEN:-}" ]]; then
+  if [[ -z "${RELEASE_SLACK_CHANNEL_ID:-}" || -z "${RELEASE_SLACK_OAUTH_TOKEN:-}" ]]; then
     echo -e "${COLOR_RED}Slack configuration missing.${COLOR_RESET}" \
-      "Check your .env for SLACK_CHANNEL_ID & SLACK_OAUTH_TOKEN"
+      "Check your .env for RELEASE_SLACK_CHANNEL_ID & RELEASE_SLACK_OAUTH_TOKEN"
     exit 1
   fi
 
   # Make the curl request and capture the response
-  local response=$(curl -s -d "token=$SLACK_OAUTH_TOKEN" https://slack.com/api/auth.test)
+  local response=$(curl -s -d "token=$RELEASE_SLACK_OAUTH_TOKEN" https://slack.com/api/auth.test)
 
   # Manually extract the "ok" field from the JSON response
   local ok=$(echo "$response" | grep -o '"ok":true')
 
   # Check if the "ok" field is found and equals true
   if [[ -z $ok ]]; then
-    echo -e "${COLOR_RED}Slack auth test failed. Please check your SLACK_OAUTH_TOKEN.${COLOR_RESET}"
+    echo -e "${COLOR_RED}Slack auth test failed. Please check your RELEASE_SLACK_OAUTH_TOKEN.${COLOR_RESET}"
     exit 1
   fi
 }

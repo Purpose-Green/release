@@ -1,9 +1,24 @@
 # Changelog
 
-## Unreleased
+## [0.6.0](https://github.com/Purpose-Green/release/compare/v9...v10) - 2024-11-10
 
-- Force user interaction on `confirm_or_exit`
-- Add `RELEASE_EXTRA_RUN_COMMANDS` to run a command when a filepath is found on a directory.
+- 79f29f5 feat: add RELEASE_ prefix to SLACK env variables
+- 80a0840 Merge pull request #9 from Purpose-Green/feat/improve-env-variables
+- 52764b6 fix: shellcheck on main_test.sh
+- c1a200b docs: update readme
+- 28a8ecd chore: move git commands to its own file git.sh
+- b333e3b chore: move env vars to env.sh
+- 8098243 Merge pull request #8 from Purpose-Green/feat/extra-commands
+- 45e451b chore: extract func render_successful_text
+- 7ad654a chore: move run_extra functions to env namespace
+- 44ba656 chore: removed dev/test files
+- dfba52d chore: avoid running twice the same extra command
+- 760ec62 test: add 2 files on src/dev for testing
+- f157ea4 docs: add RELEASE_EXTRA_RUN_COMMANDS to readme
+- 438f24a feat: add main::extra_run_commands
+- 1ca4a3e chore: add function prefix to dev/dumper.sh
+- 2f65fd0 feat: force user interaction on confirm_or_exit
+- ce5ea87 docs: move Demo below Env variables on readme
 
 ## [0.5.0](https://github.com/Purpose-Green/release/compare/v8...v9) - 2024-11-06
 
