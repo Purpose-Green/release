@@ -59,3 +59,9 @@ function env::run_extra_commands() {
     fi
   done <<< "$changed_files"
 }
+
+function env::render_successful_text() {
+  if [ -n "${RELEASE_SUCCESSFUL_TEXT:-}" ]; then
+    echo -e "$RELEASE_SUCCESSFUL_TEXT"
+  fi
+}

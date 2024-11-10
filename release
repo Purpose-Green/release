@@ -82,6 +82,4 @@ main::action "$SOURCE_BRANCH" \
   "$FORCE_DEPLOY"
 
 echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
-if [ -n "$RELEASE_SUCCESSFUL_TEXT" ]; then
-  echo -e "$RELEASE_SUCCESSFUL_TEXT"
-fi
+env::render_successful_text
