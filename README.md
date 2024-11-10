@@ -55,6 +55,12 @@ The value is the question forced to be asked. It must be [y/Y] to continue the r
 
 > Example: RELEASE_EXTRA_CONFIRMATION='{"migrations": "Migrations found! Remember to create a DB backup!"}'
 
+### RELEASE_EXTRA_RUN_COMMANDS
+
+Run a command when a filepath is found on such a key.
+
+> Example: RELEASE_EXTRA_RUN_COMMANDS='{"migrations": "api_call_to_create_DB_backup"}'
+
 ## Demo
 
 ### Using --dry-run
