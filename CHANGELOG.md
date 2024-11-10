@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Force user interaction on `confirm_or_exit`
+
 ## [0.5.0](https://github.com/Purpose-Green/release/compare/v8...v9) - 2024-11-06
 
 - Use [bashdep](https://github.com/Chemaclass/bashdep) to install dependencies
