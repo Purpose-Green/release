@@ -6,7 +6,7 @@
 #   https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
 # Credit:
 #   https://superuser.com/a/1119396
-sgr() {
+function sgr() {
   local codes=${1:-0}
   shift
 
