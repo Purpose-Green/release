@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # shellcheck disable=SC2155
 function io::confirm_or_exit() {

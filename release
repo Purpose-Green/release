@@ -12,6 +12,7 @@ source "$RELEASE_ROOT_DIR/src/colors.sh"
 source "$RELEASE_ROOT_DIR/src/compare.sh"
 source "$RELEASE_ROOT_DIR/src/console_header.sh"
 source "$RELEASE_ROOT_DIR/src/env.sh"
+source "$RELEASE_ROOT_DIR/src/git.sh"
 source "$RELEASE_ROOT_DIR/src/io.sh"
 source "$RELEASE_ROOT_DIR/src/release.sh"
 source "$RELEASE_ROOT_DIR/src/validate.sh"
@@ -19,18 +20,9 @@ source "$RELEASE_ROOT_DIR/src/slack.sh"
 source "$RELEASE_ROOT_DIR/src/json.sh"
 source "$RELEASE_ROOT_DIR/src/main.sh"
 
-# Check if at least one argument (branch name) is passed
-if [ $# -lt 1 ]; then
-  console_header::print_help
-  exit 1
-fi
-
-SOURCE_BRANCH=${1:-SOURCE_BRANCH:-"main"}
-TARGET_BRANCH=${TARGET_BRANCH:-"prod"}
-DEVELOPMENT_BRANCH=${DEVELOPMENT_BRANCH:-"main"}
-RELEASE_SUCCESSFUL_TEXT=${RELEASE_SUCCESSFUL_TEXT:-}
-DRY_RUN=${DRY_RUN:-false}
+DRY_RUN=false
 FORCE_DEPLOY=false
+GH_CLI_INSTALLED=false
 
 while [[ $# -gt 0 ]]; do
   argument="$1"
@@ -53,33 +45,37 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     --source)
-      SOURCE_BRANCH="$2"
+      RELEASE_SOURCE_BRANCH="$2"
       shift
       ;;
     --target)
-      TARGET_BRANCH="$2"
+      RELEASE_TARGET_BRANCH="$2"
       shift
       ;;
     --develop)
-      DEVELOPMENT_BRANCH="$2"
+      RELEASE_DEVELOPMENT_BRANCH="$2"
       shift
       ;;
+    *)
+      RELEASE_SOURCE_BRANCH=$argument
   esac
   shift
 done
 
-GH_CLI_INSTALLED=false
 if command -v gh &> /dev/null; then
     GH_CLI_INSTALLED=true
 fi
 
-export GH_CLI_INSTALLED
-export DRY_RUN
+#######################################################
 
-main::action "$SOURCE_BRANCH" \
-  "$TARGET_BRANCH" \
-  "$DEVELOPMENT_BRANCH" \
-  "$FORCE_DEPLOY"
+export DRY_RUN
+export FORCE_DEPLOY
+export GH_CLI_INSTALLED
+export RELEASE_SOURCE_BRANCH
+export RELEASE_TARGET_BRANCH
+export RELEASE_DEVELOPMENT_BRANCH
+
+main::action "$FORCE_DEPLOY"
 
 echo -e "${COLOR_GREEN}Script completed${COLOR_RESET}"
 env::render_successful_text

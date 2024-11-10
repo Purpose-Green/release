@@ -41,6 +41,24 @@ Examples:
 
 ## Env variables
 
+### RELEASE_SOURCE_BRANCH
+
+The default source branch that you want to use for your releases.
+
+> Default: `main`
+
+### RELEASE_TARGET_BRANCH
+
+The default target branch that you want to use for your releases.
+
+> Default: `prod`
+
+### RELEASE_DEVELOPMENT_BRANCH
+
+If you have a different develop branch from the source branch, you can also define it here.
+
+> Default: `main`
+
 ### RELEASE_SUCCESSFUL_TEXT
 
 Display a text at the very end of the release.
