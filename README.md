@@ -50,14 +50,16 @@ Useful to have a link directly to the releases page to validate everything was g
 
 ### RELEASE_EXTRA_CONFIRMATION
 
-Force asking for a new dialog when a filepath is found on such a key.
+Force asking for a new dialog when a filepath is found on such a directly (the key).
 The value is the question forced to be asked. It must be [y/Y] to continue the release.
 
 > Example: RELEASE_EXTRA_CONFIRMATION='{"migrations": "Migrations found! Remember to create a DB backup!"}'
 
 ### RELEASE_EXTRA_RUN_COMMANDS
 
-Run a command when a filepath is found on such a key.
+Run a command when a filepath is found on such a directory (the key).
+The commands will be executed only once, even if multiple files are affected.
+How? After running a command, this will be saved on memory to avoid running the same command twice.
 
 > Example: RELEASE_EXTRA_RUN_COMMANDS='{"migrations": "api_call_to_create_DB_backup"}'
 

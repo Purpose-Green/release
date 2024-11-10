@@ -86,13 +86,25 @@ function main::extra_run_commands() {
   fi
 
   local extra_command filepath
+  local executed_commands=()
 
-  # Iterate over each file path and find the first applicable extra command
+  # Iterate over each filepath and find the first applicable extra command
   while IFS= read -r filepath; do
     extra_command=$(json::parse_text "$RELEASE_EXTRA_RUN_COMMANDS" "$filepath")
-    if [[ -n "$extra_command" ]]; then
+
+    # Check if the command has already been executed
+    local already_executed=false
+    for cmd in "${executed_commands[@]:-}"; do
+      if [[ "$cmd" == "$extra_command" ]]; then
+        already_executed=true
+        break
+      fi
+    done
+
+    if [[ -n "$extra_command" && "$already_executed" == false ]]; then
       echo -e "> ${COLOR_BLUE}Extra command${COLOR_RESET} found for '$filepath'..."
       eval "$extra_command"
+      executed_commands+=("$extra_command")
     fi
   done <<< "$changed_files"
 }

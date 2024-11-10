@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Force user interaction on `confirm_or_exit`
-- Add `RELEASE_EXTRA_RUN_COMMANDS` to automatically run a command when a filepath is found on such a key.
+- Add `RELEASE_EXTRA_RUN_COMMANDS` to run a command when a filepath is found on a directory.
 
 ## [0.5.0](https://github.com/Purpose-Green/release/compare/v8...v9) - 2024-11-06
 
