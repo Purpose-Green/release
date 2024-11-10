@@ -7,5 +7,5 @@ function set_up() {
 function test_main_without_args() {
   spy gh
   spy git
-  assert_match_snapshot "$($SCRIPT)"
+  assert_match_snapshot "$($SCRIPT -h)"
 }

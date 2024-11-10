@@ -3,10 +3,11 @@
 set -euo pipefail
 
 function main::action() {
-  local source=${1:-main}
-  local target=${2:-prod}
-  local develop=${3:-1:-main}
-  local force_release=${4:-false}
+  local force_release=${1:-false}
+
+  local source=${RELEASE_SOURCE_BRANCH:-main}
+  local target=${RELEASE_TARGET_BRANCH:-prod}
+  local develop=${RELEASE_DEVELOPMENT_BRANCH:-$source}
 
   validate::slack_configured "$force_release"
 
@@ -56,8 +57,8 @@ function main::action() {
 
 function main::render_steps() {
   local source=$1
-  local target=$1
-  local develop=$2
+  local target=$2
+  local develop=$3
 
   echo "This script will automate the release process and follow the following steps:"
   echo "- Define the branch to release: $source"
