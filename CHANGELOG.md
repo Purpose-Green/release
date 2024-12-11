@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.0](https://github.com/Purpose-Green/release/compare/v10...v11) - 2024-12-11
+
+- 0eec321 docs: add -e, --env to readme
+- ae52593 feat: add -e|--env option
+- 5a1761f chore: split .env from .env.tools
+
 ## [0.6.0](https://github.com/Purpose-Green/release/compare/v9...v10) - 2024-11-10
 
 - 79f29f5 feat: add RELEASE_ prefix to SLACK env variables
