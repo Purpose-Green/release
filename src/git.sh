@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2155
 
 function git::status() {
   git status
@@ -18,6 +19,24 @@ function git::changed_files() {
 
 function git::latest_tag() {
   git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0"
+}
+
+function git::check_current_branch_and_pull() {
+  git::fetch_origin
+  # Check if the branch is behind
+  local status_output=$(git status)
+
+  if [[ "$status_output" == *"Your branch is behind"* ]]; then
+    echo -e "${COLOR_RED}Your local branch is not up to date!${COLOR_RESET}"
+    local question=$(echo -e "Do you want to pull the latest changes?")
+    io::confirm_or_exit "$question"
+    echo -e "${COLOR_GREEN}Pulling updates...${COLOR_RESET}"
+    git pull origin
+  else
+    echo -e "${COLOR_GREEN}Your branch is up to date!${COLOR_RESET}"
+  fi
+
+  git::status
 }
 
 function git::force_checkout() {
