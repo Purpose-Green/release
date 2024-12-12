@@ -60,20 +60,19 @@ function main::render_steps() {
   local target=$2
   local develop=$3
 
-  echo "This script will automate the release process and follow the following steps:"
-  echo "- Define the branch to release: $source"
-  echo "- Fetch latest remote changes"
-  echo "- Compare the branch with $target to view the commits that will be released"
-  echo "- Confirm you wish to proceed"
-  echo "- Merge the selected branch to $target"
-  echo "- Create a tag and release"
-  echo "- Notify via slack that a new release was created"
-  echo "- Merge the selected branch back to $develop"
-  echo ""
-  echo "This script must use your local git environment."
+  echo -e "This script will automate the release process and follow the following steps:"
+  echo -e "- Define the branch to release: ${COLOR_YELLOW}$source${COLOR_RESET}"
+  echo -e "- Fetch latest remote changes"
+  echo -e "- Compare the branch with ${COLOR_YELLOW}$target${COLOR_RESET} to view the commits that will be released"
+  echo -e "- Confirm you wish to proceed"
+  echo -e "- Merge the selected branch (${COLOR_YELLOW}$source${COLOR_RESET}) to ${COLOR_YELLOW}$target${COLOR_RESET}"
+  echo -e "- Create a tag and release"
+  echo -e "- Notify via slack that a new release was created"
+  echo -e "- Merge the target (${COLOR_YELLOW}$target${COLOR_RESET}) back to ${COLOR_YELLOW}$develop${COLOR_RESET}"
+  echo -e ""
+  echo -e "This script must use your local git environment."
 
   if [[ "$DRY_RUN" == true ]]; then
-    echo -e "${COLOR_YELLOW}--dry-run enabled${COLOR_RESET}"
-    return
+    echo -e "${COLOR_BLUE}--dry-run enabled${COLOR_RESET}"
   fi
 }
