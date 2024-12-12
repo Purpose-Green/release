@@ -35,7 +35,6 @@ Changes:
 $changed_files"
 
   git push origin "$new_tag" --no-verify
-  git push origin "$branch_name" --no-verify
 }
 
 # shellcheck disable=SC2155
