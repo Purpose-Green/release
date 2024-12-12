@@ -19,7 +19,7 @@ function main::action() {
   main::render_steps "$source" "$target" "$develop"
 
   echo -e "${COLOR_PURPLE}------------------------------------------------------------------${COLOR_RESET}"
-  git::fetch_origin
+  git::pull_origin
   git::status
   echo -e "${COLOR_BLUE}------------------------------------------------------------------${COLOR_RESET}"
 
