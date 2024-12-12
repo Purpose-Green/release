@@ -49,9 +49,6 @@ help:
 SRC_SCRIPTS_DIR=src
 PRE_COMMIT_SCRIPTS_FILE=./bin/pre-commit
 
-test: $(TEST_SCRIPTS_DIR)
-	@lib/bashunit tests
-
 pre_commit/install:
 	@echo "Installing pre-commit hook"
 	cp $(PRE_COMMIT_SCRIPTS_FILE) $(GIT_DIR)/hooks/
@@ -71,3 +68,20 @@ ifndef LINTER_CHECKER
 else
 	@ec -config .editorconfig && printf "\e[1m\e[32m%s\e[0m\n" "editorconfig-check: OK!"
 endif
+
+install:
+	@./install-dependencies.sh
+
+create-pr:
+	@if [ ! -f lib/create-pr ]; then \
+		echo "Error: lib/create-pr not found. Did you forgot to './install-dependencies.sh'?"; \
+		exit 1; \
+	fi
+	@lib/create-pr -e .env.tools
+
+test:
+	@if [ ! -f lib/bashunit ]; then \
+		echo "Error: lib/bashunit not found. Did you forgot to './install-dependencies.sh'?"; \
+		exit 1; \
+	fi
+	@lib/bashunit -e .env.tools
