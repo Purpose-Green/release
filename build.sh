@@ -134,7 +134,7 @@ function update_changelog() {
 function increment_tag_version() {
   local tag=$1  # The input version tag, e.g., "v11"
   local prefix=${tag%%[0-9]*}  # Extract the prefix (non-numeric part, e.g., "v")
-  local numeric_part=${tag#$prefix}  # Extract the numeric part (e.g., "11")
+  local numeric_part=${tag#"$prefix"}  # Extract the numeric part (e.g., "11")
   local new_numeric_part=$((numeric_part + 1))  # Increment the numeric part
   echo "${prefix}${new_numeric_part}"  # Return the new tag
 }
