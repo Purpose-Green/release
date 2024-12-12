@@ -42,6 +42,8 @@ function git::force_checkout() {
     git checkout -b "$branch_name" origin/"$branch_name"
   fi
 
+  git::pull_origin
+
   [ -f .git/hooks/post-checkout.bak ] && mv .git/hooks/post-checkout.bak .git/hooks/post-checkout
   git config advice.detachedHead true
 }
