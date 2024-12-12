@@ -23,7 +23,6 @@ Arguments:
   source-branch        The branch name to release.
 
 Options:
-  --debug               Enable debug mode (set -x)
   -d, --dry-run         Simulate the release process without making any changes
   -f, --force           Ignore that your current local branch has ahead commits
   -e, --env             Load a custom env file overriding the .env environment variables
@@ -31,7 +30,8 @@ Options:
   -v, --version         Print version information and exit
   --source branch       Specify the source branch
   --target branch       Specify the target branch (default: "prod")
-  --develop branch      Specify the develop branch (default: source-branch)
+  --develop branch      Specify the develop branch (default: {source-branch})
+  --debug               Enable debug mode (set -x)
 
 Examples:
   release main
@@ -122,6 +122,7 @@ Make sure you have .env ready to use.
 
 ```bash
 cp .env.dist .env
+cp .env.tools.dist .env.tools
 ```
 
 #### Source
@@ -129,9 +130,11 @@ cp .env.dist .env
 - The entry point of the script is `./release`
 - The source code is `src/`, split by different script files storing isolated functions.
 - You can build the entire project and create a single executable script with `./build.sh`
+- Make sure to install dependencies with `make install` or `./install-dependencies.sh`
+  - This will install libraries such as bashdep, bashunit, create-pr, dev/dumper
 
 #### Tests
 
 The tests are inside `tests/`, using [bashunit](https://github.com/TypedDevs/bashunit/).
 
-Use `install-dependencies.sh` to install bashunit inside your `lib/` folder
+> Remember to install bashunit with `make install`.
