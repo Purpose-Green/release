@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.8.0](https://github.com/Purpose-Green/release/compare/v11...v12) - 2024-12-12
+
+- cc236cb trigger CI
+- f519545 chore: add colors to git::check_current_branch_and_pull
+- 8ae322b refactor: move git::check_current_branch_and_pull
+- a471a4a feat: add main::check_current_branch_and_pull
+- 7437267 feat: use pull instead of fetch on main::action
+- a26b090 fix: style increment_tag_version
+- 0f8c591 fix: new_tag increment_tag_version on build.sh
+- 84fc2c8 Merge pull request #14 from Purpose-Green/feat/git-pull
+- d9ff96e fix: remove duplicated git push branch on create_tag()
+- 0cfaf78 feat: git::pull_origin on force_checkout
+- dd35ce6 chore: add git::pull_origin
+- 684695f docs: update readme
+- df76bdd chore: load dev/dumper.sh only if exists
+- 915ac49 chore: add make install and test
+- a12c341 chore: add make create-pr
+- 5c0b546 chore: update dev/dumper.sh
+- 84cb207 chore: color vars in render_steps()
+- e6ed05f fix: push only new tag instead of all
+
 ## [0.7.0](https://github.com/Purpose-Green/release/compare/v10...v11) - 2024-12-11
 
 - 0eec321 docs: add -e, --env to readme
