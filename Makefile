@@ -71,3 +71,6 @@ ifndef LINTER_CHECKER
 else
 	@ec -config .editorconfig && printf "\e[1m\e[32m%s\e[0m\n" "editorconfig-check: OK!"
 endif
+
+create-pr:
+	@lib/create-pr -e .env.tools
