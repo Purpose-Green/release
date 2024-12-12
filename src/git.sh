@@ -8,6 +8,10 @@ function git::fetch_origin() {
   git fetch origin
 }
 
+function git::pull_origin() {
+  git pull origin
+}
+
 function git::changed_files() {
   git diff --name-only "$1".."$2"
 }
@@ -28,7 +32,7 @@ function git::force_checkout() {
   git config advice.detachedHead false
   [ -f .git/hooks/post-checkout ] && mv .git/hooks/post-checkout .git/hooks/post-checkout.bak
 
-  git fetch origin
+  git::fetch_origin
 
   if git rev-parse --verify "$branch_name" >/dev/null 2>&1; then
     # If branch exists locally, force checkout it
@@ -37,6 +41,8 @@ function git::force_checkout() {
     # If branch doesn't exist, create a new local branch from the remote
     git checkout -b "$branch_name" origin/"$branch_name"
   fi
+
+  git::pull_origin
 
   [ -f .git/hooks/post-checkout.bak ] && mv .git/hooks/post-checkout.bak .git/hooks/post-checkout
   git config advice.detachedHead true
