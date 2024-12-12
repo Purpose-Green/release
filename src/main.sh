@@ -68,7 +68,7 @@ function main::render_steps() {
   echo -e "- Merge the selected branch (${COLOR_YELLOW}$source${COLOR_RESET}) to ${COLOR_YELLOW}$target${COLOR_RESET}"
   echo -e "- Create a tag and release"
   echo -e "- Notify via slack that a new release was created"
-  echo -e "- Merge the target branch (${COLOR_YELLOW}$target${COLOR_RESET}) back to ${COLOR_YELLOW}$develop${COLOR_RESET}"
+  echo -e "- Merge the target (${COLOR_YELLOW}$target${COLOR_RESET}) back to ${COLOR_YELLOW}$develop${COLOR_RESET}"
   echo -e ""
   echo -e "This script must use your local git environment."
 
