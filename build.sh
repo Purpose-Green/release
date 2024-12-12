@@ -102,13 +102,13 @@ function update_version() {
 function update_changelog() {
   local target_version=$1
   local new_version=$2
-  local new_tag=$2
 
   local changelog_file="CHANGELOG.md"
   local current_date=$(date +'%Y-%m-%d')
   local previous_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0")
   local remote_url=$(git remote get-url origin)
   local repo_info=$(echo "$remote_url" | sed -E 's|git@github\.com:||; s|\.git$||')
+  local new_tag=$(increment_tag_version "$previous_tag")
   local changelog_url="https://github.com/$repo_info/compare/$previous_tag...$new_tag"
 
   local commits=$(git log "$target_version"..HEAD --oneline)
@@ -129,6 +129,14 @@ function update_changelog() {
 
   # Replace the original changelog with the updated one
   mv "$temp_file" "$changelog_file"
+}
+
+function increment_tag_version() {
+  local tag=$1  # The input version tag, e.g., "v11"
+  local prefix=${tag%%[0-9]*}  # Extract the prefix (non-numeric part, e.g., "v")
+  local numeric_part=${tag#"$prefix"}  # Extract the numeric part (e.g., "11")
+  local new_numeric_part=$((numeric_part + 1))  # Increment the numeric part
+  echo "${prefix}${new_numeric_part}"  # Return the new tag
 }
 
 ########################
