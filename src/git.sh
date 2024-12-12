@@ -28,7 +28,7 @@ function git::check_current_branch_and_pull() {
 
   if [[ "$status_output" == *"Your branch is behind"* ]]; then
     echo -e "${COLOR_RED}Your local branch is not up to date!${COLOR_RESET}"
-    local question=$(echo -e "Do you want to pull the latest changes?")
+    local question=$(echo -e "${COLOR_ORANGE}You have to have the latest changes.${COLOR_RESET} Apply git pull now?")
     io::confirm_or_exit "$question"
     echo -e "${COLOR_GREEN}Pulling updates...${COLOR_RESET}"
     git pull origin
