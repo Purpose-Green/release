@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.1](https://github.com/Purpose-Green/release/compare/v14...v15) - 2024-12-17
+
+- fix not pushing to prod
+
 ## [0.8.0](https://github.com/Purpose-Green/release/compare/v11...v12) - 2024-12-12
 
 - cc236cb trigger CI
