@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.2](https://github.com/Purpose-Green/release/compare/v15...v16) - 2024-12-17
+
+- d1cd38f fix
+- c3697a7 release: 0.8.1
+
 ## [0.8.1](https://github.com/Purpose-Green/release/compare/v14...v15) - 2024-12-17
 
 - fix not pushing to prod
