@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.3](https://github.com/Purpose-Green/release/compare/v16...v17) - 2025-05-20
+
+- 25b4644 update license
+
 ## [0.8.2](https://github.com/Purpose-Green/release/compare/v15...v16) - 2024-12-17
 
 - d1cd38f fix
