@@ -17,9 +17,7 @@ function release::generate_new_tag() {
 }
 
 function release::create_tag() {
-  local branch_name=$1
   local branch_name="${1#origin/}"  # Remove 'origin/' prefix if present
-
   local new_tag=$2
   local changed_files=$3
 
