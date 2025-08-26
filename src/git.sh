@@ -10,7 +10,20 @@ function git::fetch_origin() {
 }
 
 function git::pull_origin() {
-  git pull origin
+  local branch="${1:-}"
+
+  if [[ -z "$branch" ]]; then
+    # If an upstream is configured, just pull with ff-only
+    if git rev-parse --abbrev-ref --symbolic-full-name "@{u}" >/dev/null 2>&1; then
+      git pull --ff-only
+      return
+    fi
+
+    # Fallback to current branch name against origin
+    branch="$(git rev-parse --abbrev-ref HEAD)"
+  fi
+
+  git pull --ff-only origin "$branch"
 }
 
 function git::changed_files() {
@@ -31,7 +44,7 @@ function git::check_current_branch_and_pull() {
     local question=$(echo -e "${COLOR_ORANGE}You have to have the latest changes.${COLOR_RESET} Apply git pull now?")
     io::confirm_or_exit "$question"
     echo -e "${COLOR_GREEN}Pulling updates...${COLOR_RESET}"
-    git pull origin
+    git::pull_origin
   else
     echo -e "${COLOR_GREEN}Your branch is up to date!${COLOR_RESET}"
   fi
@@ -61,7 +74,10 @@ function git::force_checkout() {
     git checkout -b "$branch_name" origin/"$branch_name"
   fi
 
-  git::pull_origin
+  # Ensure upstream is configured (avoid "did not specify a branch" error)
+  git branch --set-upstream-to=origin/"$branch_name" "$branch_name" >/dev/null 2>&1 || true
+
+  git::pull_origin "$branch_name"
 
   [ -f .git/hooks/post-checkout.bak ] && mv .git/hooks/post-checkout.bak .git/hooks/post-checkout
   git config advice.detachedHead true
