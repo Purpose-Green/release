@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.4](https://github.com/Purpose-Green/release/compare/v17...v18) - 2025-08-26
+
+- 88dd52f Merge pull request #19 from Purpose-Green/fix/git-pull
+- 04a786e fix: linter
+- ca9a75d chore: update install-dependencies.sh
+- 3c92b68 refactor: remove duplicate branch_name local var
+- ea1532e refactor: mv test/helpers to tests/bootstrap
+- 46e2d6b fix: git pull
+- 4f02e0b set bashunit:0.21.0 - mocks are fixed
+
 ## [0.8.3](https://github.com/Purpose-Green/release/compare/v16...v17) - 2025-05-20
 
 - 25b4644 update license
