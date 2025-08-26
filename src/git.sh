@@ -14,7 +14,7 @@ function git::pull_origin() {
 
   if [[ -z "$branch" ]]; then
     # If an upstream is configured, just pull with ff-only
-    if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+    if git rev-parse --abbrev-ref --symbolic-full-name "@{u}" >/dev/null 2>&1; then
       git pull --ff-only
       return
     fi
