@@ -30,8 +30,30 @@ function git::changed_files() {
   git diff --name-only "$1".."$2"
 }
 
+function git::extract_max_version_number() {
+  local tags="$1"
+  local max_version=0
+
+  while IFS= read -r tag; do
+    if [[ "$tag" =~ ^v([0-9]+)$ ]]; then
+      local version="${BASH_REMATCH[1]}"
+      if (( version > max_version )); then
+        max_version="$version"
+      fi
+    fi
+  done <<< "$tags"
+
+  echo "$max_version"
+}
+
 function git::latest_tag() {
-  git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || echo "v0"
+  local all_tags
+  all_tags=$(git tag -l 2>/dev/null)
+
+  local max_version
+  max_version=$(git::extract_max_version_number "$all_tags")
+
+  echo "v$max_version"
 }
 
 function git::check_current_branch_and_pull() {
