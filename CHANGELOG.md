@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.5](https://github.com/Purpose-Green/release/compare/v18...v19) - 2025-11-27
+
+- d1d6e1e Merge pull request #21 from Purpose-Green/fix/20-find-next-version
+- bdcacd4 fix: filter tags by vNUMBER pattern to prevent version reset
+- 67f8e05 ignore .claude/
+
 ## [0.8.4](https://github.com/Purpose-Green/release/compare/v17...v18) - 2025-08-26
 
 - 88dd52f Merge pull request #19 from Purpose-Green/fix/git-pull
