@@ -25,7 +25,8 @@ trap slack::cleanup EXIT
 # Returns:
 #   0 on success, 1 on failure
 #
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 function slack::notify() {
   if [[ -z "${RELEASE_SLACK_CHANNEL_ID:-}" || -z "${RELEASE_SLACK_OAUTH_TOKEN:-}" ]]; then
     echo -e "${COLOR_CYAN}Slack configuration missing." \

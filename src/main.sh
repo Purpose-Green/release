@@ -1,6 +1,8 @@
 #!/bin/bash
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
 set -euo pipefail
+
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 
 # Main release workflow orchestrator
 #

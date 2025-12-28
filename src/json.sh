@@ -1,6 +1,8 @@
 #!/bin/bash
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
 set -euo pipefail
+
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 
 # Extracts a value from a simple JSON object by matching a file path
 #

@@ -72,7 +72,8 @@ $changed_files"
 #
 # Note: If previous_tag is "v0" (first release), it uses "main" as the comparison base
 #
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 function release::create_github_release() {
   if [[ "$GH_CLI_INSTALLED" == false ]]; then
     return
@@ -122,7 +123,8 @@ function release::create_github_release() {
 # Output:
 #   A formatted release name (e.g., "2024-01-15 #1")
 #
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 function release::generate_release_name() {
   local current_date=$(date +"%Y-%m-%d")
   # Use xargs to trim leading/trailing whitespace

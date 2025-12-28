@@ -9,7 +9,8 @@ set -euo pipefail
 # Returns:
 #   Continues if user enters 'y' or 'Y', exits with 1 otherwise
 #
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 function io::confirm_or_exit() {
   local txt=$(echo -e "$1 [N/y]:")
   read -p "$txt " -r

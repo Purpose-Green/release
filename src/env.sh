@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
+
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 
 # Load environment variables from .env file if it exists
 # shellcheck source=/dev/null

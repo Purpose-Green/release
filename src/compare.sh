@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# shellcheck disable=SC2005 - Using echo to capture git log output with colors
+# Using echo to capture git log output with colors
+# shellcheck disable=SC2005
 
 # Displays commits and file changes between source and target branches
 #

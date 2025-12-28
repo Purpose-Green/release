@@ -55,7 +55,8 @@ your${COLOR_RESET} ${COLOR_ORANGE}$source${COLOR_RESET}."
 # Returns:
 #   Exits with 1 if Slack is not configured or auth fails
 #
-# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
 function validate::slack_configured() {
   local force_release=$1
 
