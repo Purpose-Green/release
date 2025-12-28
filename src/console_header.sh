@@ -1,10 +1,12 @@
 #!/bin/bash
 set -o allexport
 
+# Prints the current release tool version
 function console_header::print_version() {
   printf "%s\n" "$RELEASE_VERSION"
 }
 
+# Prints usage information and available options
 function console_header::print_help() {
   cat <<EOL
 Usage: release [arguments] [options]

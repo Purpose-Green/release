@@ -1,13 +1,24 @@
 #!/bin/bash
-# shellcheck disable=SC2155
 set -euo pipefail
 
-# Render the value str where the key is matching on the given json
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
+
+# Extracts a value from a simple JSON object by matching a file path
 #
-# $1 full json as str
-# $2 the filepath
+# This function progressively searches from the full path up to parent directories
+# until it finds a matching key in the JSON object.
 #
-# Example: '{"src/dev": "are you sure you want to change the files in this dir?"}'
+# Arguments:
+#   $1 - json_str: A JSON object string (e.g., '{"src/dev": "message"}')
+#   $2 - filepath: The file path to look up
+#
+# Output:
+#   The value associated with the matching path, or empty if not found
+#
+# Example:
+#   json::parse_text '{"src/dev": "Are you sure?"}' "src/dev/file.sh"
+#   # Returns: "Are you sure?" (matches parent directory "src/dev")
 function json::parse_text() {
     local json_str="$1"
     local filepath="$2"

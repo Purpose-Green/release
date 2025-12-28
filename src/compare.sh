@@ -1,8 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+# Using echo to capture git log output with colors
 # shellcheck disable=SC2005
 
+# Displays commits and file changes between source and target branches
+#
+# Arguments:
+#   $1 - source: The source branch name
+#   $2 - target: The target branch name
 function compare::source_with_target() {
   local source=$1
   local target=$2
@@ -16,6 +22,14 @@ function compare::source_with_target() {
   compare::render_changed_files "$source" "$target"
 }
 
+# Renders changed files with color-coded status indicators
+#
+# Arguments:
+#   $1 - source: The source branch name
+#   $2 - target: The target branch name
+#
+# Output:
+#   Color-coded file list: green (+) for added, yellow (~) for modified, red (-) for deleted
 function compare::render_changed_files() {
   local source=$1
   local target=$2
@@ -42,14 +56,14 @@ function compare::render_changed_files() {
   # Output the files, sorted by status
 
   # Added (created) files
-  if [ "${#added_files[@]}" -gt 0 ]; then
+  if [[ "${#added_files[@]}" -gt 0 ]]; then
     for file in "${added_files[@]}"; do
         echo -e "${COLOR_GREEN}+ $file${COLOR_RESET}"
     done
   fi
 
   # Modified (updated) files
-  if [ "${#modified_files[@]}" -gt 0 ]; then
+  if [[ "${#modified_files[@]}" -gt 0 ]]; then
     for file in "${modified_files[@]}"; do
         echo -e "${COLOR_YELLOW}~ $file${COLOR_RESET}"
     done
@@ -57,7 +71,7 @@ function compare::render_changed_files() {
 
 
   # Deleted files
-  if [ "${#deleted_files[@]}" -gt 0 ]; then
+  if [[ "${#deleted_files[@]}" -gt 0 ]]; then
     for file in "${deleted_files[@]}"; do
         echo -e "${COLOR_RED}- $file${COLOR_RESET}"
     done

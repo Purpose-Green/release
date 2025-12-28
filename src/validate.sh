@@ -1,6 +1,18 @@
 #!/bin/bash
 set -euo pipefail
 
+# Validates that local branch is not ahead of origin
+#
+# If the local branch has unpushed commits, prompts for confirmation (with --force)
+# or exits with an error.
+#
+# Arguments:
+#   $1 - source: The source branch name
+#   $2 - target: The target branch name
+#   $3 - force_release: Whether to allow ahead commits ("true" or "false")
+#
+# Returns:
+#   Exits with 1 if ahead and not forced, continues otherwise
 function validate::no_diff_between_local_and_origin() {
   local source=$1
   local target=$2
@@ -32,6 +44,18 @@ your${COLOR_RESET} ${COLOR_ORANGE}$source${COLOR_RESET}."
     io::confirm_or_exit "$question"
   fi
 }
+# Validates that Slack credentials are configured and working
+#
+# Tests the Slack OAuth token by making an auth.test API call.
+# Skipped if force_release is true.
+#
+# Arguments:
+#   $1 - force_release: Whether to skip validation ("true" or "false")
+#
+# Returns:
+#   Exits with 1 if Slack is not configured or auth fails
+#
+# Using local with command substitution is acceptable for readability
 # shellcheck disable=SC2155
 function validate::slack_configured() {
   local force_release=$1
@@ -50,7 +74,8 @@ function validate::slack_configured() {
   # Make the curl request and capture the response
   local response=$(curl -s -d "token=$RELEASE_SLACK_OAUTH_TOKEN" https://slack.com/api/auth.test)
 
-  # Manually extract the "ok" field from the JSON response
+  # Extract the "ok" field from the JSON response using grep pattern matching
+  # This avoids requiring jq as a dependency
   local ok=$(echo "$response" | grep -o '"ok":true')
 
   # Check if the "ok" field is found and equals true

@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Prompts user for confirmation and exits if not confirmed
+#
+# Arguments:
+#   $1 - prompt: The question/prompt to display (supports color codes)
+#
+# Returns:
+#   Continues if user enters 'y' or 'Y', exits with 1 otherwise
+#
+# Using local with command substitution is acceptable for readability
 # shellcheck disable=SC2155
 function io::confirm_or_exit() {
   local txt=$(echo -e "$1 [N/y]:")

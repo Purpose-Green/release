@@ -7,8 +7,9 @@ declare -r RELEASE_VERSION="0.8.5"
 RELEASE_ROOT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 export RELEASE_ROOT_DIR
 
-[ -f "$RELEASE_ROOT_DIR/src/dev/dumper.sh" ] && source "$RELEASE_ROOT_DIR/src/dev/dumper.sh"
+[[ -f "$RELEASE_ROOT_DIR/src/dev/dumper.sh" ]] && source "$RELEASE_ROOT_DIR/src/dev/dumper.sh"
 source "$RELEASE_ROOT_DIR/src/colors.sh"
+source "$RELEASE_ROOT_DIR/src/console.sh"
 source "$RELEASE_ROOT_DIR/src/compare.sh"
 source "$RELEASE_ROOT_DIR/src/console_header.sh"
 source "$RELEASE_ROOT_DIR/src/env.sh"

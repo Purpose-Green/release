@@ -1,6 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+# Generates the next version tag by incrementing the current version
+#
+# Arguments:
+#   $1 - latest_tag: The current latest tag (e.g., "v5")
+#   $2 - changed_files: List of changed files (not used but kept for API consistency)
+#
+# Output:
+#   The next version tag (e.g., "v6")
 function release::generate_new_tag() {
   local latest_tag=$1
   local changed_files=$2
@@ -16,6 +24,15 @@ function release::generate_new_tag() {
   echo "v$tag_number"
 }
 
+# Creates an annotated git tag and pushes it along with the branch to origin
+#
+# Arguments:
+#   $1 - branch: The branch name (may include 'origin/' prefix)
+#   $2 - new_tag: The version tag to create (e.g., "v5")
+#   $3 - changed_files: List of changed files for the tag annotation
+#
+# Returns:
+#   Exits with 1 if push fails
 function release::create_tag() {
   local branch_name="${1#origin/}"  # Remove 'origin/' prefix if present
   local new_tag=$2
@@ -32,20 +49,41 @@ function release::create_tag() {
 Changes:
 $changed_files"
 
-  git push origin "$new_tag" --no-verify
-  git push origin "$branch_name" --no-verify
+  if ! git push origin "$new_tag" --no-verify; then
+    echo -e "${COLOR_RED}Failed to push tag $new_tag." \
+      "Please check your network connection and permissions.${COLOR_RESET}"
+    exit 1
+  fi
+
+  if ! git push origin "$branch_name" --no-verify; then
+    echo -e "${COLOR_RED}Failed to push branch $branch_name." \
+      "Please check your network connection and permissions.${COLOR_RESET}"
+    exit 1
+  fi
 }
 
+# Creates a GitHub release with commit history and changelog link
+#
+# Requires the GitHub CLI (gh) to be installed.
+#
+# Arguments:
+#   $1 - previous_tag: The previous release tag for changelog comparison
+#   $2 - new_tag: The new version tag being released
+#
+# Note: If previous_tag is "v0" (first release), it uses "main" as the comparison base
+#
+# Using local with command substitution is acceptable for readability
 # shellcheck disable=SC2155
 function release::create_github_release() {
-  if [ "$GH_CLI_INSTALLED" = false ]; then
+  if [[ "$GH_CLI_INSTALLED" == false ]]; then
     return
   fi
 
   local previous_tag=$1
   local new_tag=$2
 
-  if [ "$previous_tag" = "v0" ]; then
+  # v0 indicates this is the first release - use main branch as comparison base
+  if [[ "$previous_tag" == "v0" ]]; then
     previous_tag="main"
   fi
 
@@ -78,6 +116,14 @@ function release::create_github_release() {
   slack::notify "$repo_info" "$release_name" "$changelog_url" "$commits" "$new_tag"
 }
 
+# Generates a date-based release name with sequential numbering
+#
+# Format: "YYYY-MM-DD #N" where N increments for each release on the same day
+#
+# Output:
+#   A formatted release name (e.g., "2024-01-15 #1")
+#
+# Using local with command substitution is acceptable for readability
 # shellcheck disable=SC2155
 function release::generate_release_name() {
   local current_date=$(date +"%Y-%m-%d")

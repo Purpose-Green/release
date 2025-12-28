@@ -1,14 +1,22 @@
 #!/bin/bash
+
+# Using local with command substitution is acceptable for readability
 # shellcheck disable=SC2155
 
+# Displays the current git status
 function git::status() {
   git status
 }
 
+# Fetches the latest changes from the origin remote
 function git::fetch_origin() {
   git fetch origin
 }
 
+# Pulls latest changes from origin with fast-forward only
+#
+# Arguments:
+#   $1 - branch: (optional) The branch to pull. If not specified, uses upstream or current branch
 function git::pull_origin() {
   local branch="${1:-}"
 
@@ -26,15 +34,38 @@ function git::pull_origin() {
   git pull --ff-only origin "$branch"
 }
 
+# Lists files that have changed between two refs
+#
+# Arguments:
+#   $1 - from_ref: The starting reference (e.g., origin/prod)
+#   $2 - to_ref: The ending reference (e.g., main)
+#
+# Output:
+#   List of changed file paths, one per line
 function git::changed_files() {
   git diff --name-only "$1".."$2"
 }
 
+# Extracts the highest version number from a list of git tags
+#
+# This function only matches simple version tags in the format "vN" where N is a number.
+# Semantic versioning tags (v1.2.3) are intentionally ignored to maintain simple sequential versioning.
+#
+# Arguments:
+#   $1 - tags: Newline-separated list of git tags
+#
+# Output:
+#   The highest version number found (without 'v' prefix), or 0 if none found
+#
+# Example:
+#   git::extract_max_version_number "v1\nv2\nv3" # outputs: 3
 function git::extract_max_version_number() {
   local tags="$1"
   local max_version=0
 
   while IFS= read -r tag; do
+    # Pattern: ^v([0-9]+)$ matches only simple vN tags (v1, v2, etc.)
+    # This intentionally excludes semver tags like v1.2.3 for sequential versioning
     if [[ "$tag" =~ ^v([0-9]+)$ ]]; then
       local version="${BASH_REMATCH[1]}"
       if (( version > max_version )); then
@@ -46,6 +77,10 @@ function git::extract_max_version_number() {
   echo "$max_version"
 }
 
+# Gets the latest release tag from the repository
+#
+# Output:
+#   The latest tag in vN format (e.g., "v5"), or "v0" if no matching tags exist
 function git::latest_tag() {
   local all_tags
   all_tags=$(git tag -l 2>/dev/null)
@@ -56,6 +91,9 @@ function git::latest_tag() {
   echo "v$max_version"
 }
 
+# Checks if the current branch is up to date with origin and pulls if behind
+#
+# Prompts user for confirmation before pulling updates
 function git::check_current_branch_and_pull() {
   git::fetch_origin
   # Check if the branch is behind
@@ -74,6 +112,13 @@ function git::check_current_branch_and_pull() {
   git::status
 }
 
+# Force checks out a branch, handling post-checkout hooks safely
+#
+# This function temporarily disables post-checkout hooks during checkout to prevent
+# interference with the release process, then restores them afterward.
+#
+# Arguments:
+#   $1 - branch: The branch to checkout (with or without 'origin/' prefix)
 function git::force_checkout() {
   local branch_name="${1#origin/}"  # Remove 'origin/' prefix if present
 
@@ -105,6 +150,13 @@ function git::force_checkout() {
   git config advice.detachedHead true
 }
 
+# Merges the target branch back to the develop branch
+#
+# This ensures hotfixes applied to the target branch are included in the develop branch.
+#
+# Arguments:
+#   $1 - develop: The development branch name (e.g., "main")
+#   $2 - target: The target/production branch name (e.g., "prod")
 function git::update_develop() {
   local develop=$1
   local target=$2
@@ -117,6 +169,14 @@ function git::update_develop() {
   git::merge_source_to_target "$target" "$develop"
 }
 
+# Merges the source branch into the target branch and pushes to origin
+#
+# Arguments:
+#   $1 - source: The source branch to merge from
+#   $2 - target: The target branch to merge into
+#
+# Returns:
+#   Exits with 1 if merge fails, continues if successful
 function git::merge_source_to_target() {
   local source=$1
   local target=$2
@@ -133,5 +193,8 @@ function git::merge_source_to_target() {
     exit 1
   fi
 
-  git push origin "$target" --no-verify
+  if ! git push origin "$target" --no-verify; then
+    echo -e "${COLOR_RED}Push failed for $target. Please check your network connection and permissions.${COLOR_RESET}"
+    exit 1
+  fi
 }

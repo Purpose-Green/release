@@ -1,7 +1,24 @@
 #!/bin/bash
-# shellcheck disable=SC2155
 set -euo pipefail
 
+# Using local with command substitution is acceptable for readability
+# shellcheck disable=SC2155
+
+# Main release workflow orchestrator
+#
+# Executes the complete release process:
+# 1. Validates Slack configuration
+# 2. Checks branch status and pulls updates
+# 3. Compares branches and shows changes
+# 4. Prompts for confirmation
+# 5. Runs extra confirmations/commands based on changed files
+# 6. Merges source to target branch
+# 7. Creates tag and GitHub release
+# 8. Notifies via Slack
+# 9. Merges back to develop branch
+#
+# Arguments:
+#   $1 - force_release: Whether to skip certain validations ("true" or "false")
 function main::action() {
   local force_release=${1:-false}
 
@@ -37,7 +54,7 @@ function main::action() {
     "and create new tag ${COLOR_CYAN}$new_tag${COLOR_RESET}... Ready to start?")
   io::confirm_or_exit "$question"
 
-  if [ -z "$changed_files" ]; then
+  if [[ -z "$changed_files" ]]; then
     echo -e "${COLOR_YELLOW}No files changed between branches, skipping merge.${COLOR_RESET}"
     exit 0
   fi
@@ -54,6 +71,12 @@ function main::action() {
   git::update_develop "$develop" "$target"
 }
 
+# Displays the release workflow steps to the user
+#
+# Arguments:
+#   $1 - source: The source branch name
+#   $2 - target: The target branch name
+#   $3 - develop: The development branch name
 function main::render_steps() {
   local source=$1
   local target=$2
