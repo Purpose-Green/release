@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 set -o allexport
 
 # Prints the current release tool version

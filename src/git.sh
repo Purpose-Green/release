@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # Using local with command substitution is acceptable for readability
 # shellcheck disable=SC2155

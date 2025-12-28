@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # Cleanup function for temporary files
 _SLACK_ERROR_LOG=""

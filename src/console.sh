@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # Console output helper functions
 # Provides consistent, colored output across the application

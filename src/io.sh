@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # Prompts user for confirmation and exits if not confirmed
 #

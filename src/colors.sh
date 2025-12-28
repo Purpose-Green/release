@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 set -o allexport
 
 export COLOR_RED="\033[1;31m"

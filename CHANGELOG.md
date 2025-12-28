@@ -12,7 +12,6 @@
 - Added error handling to all `git push` operations in `src/git.sh` and `src/release.sh`
 - Added error handling around `eval` in `src/env.sh` for extra commands
 - Fixed insecure temp file handling in `src/slack.sh` using `mktemp` with cleanup trap
-- Standardized shell options: added `set -euo pipefail` to all source files
 - Replaced all `[` with `[[` for consistent modern Bash syntax
 
 ### Changed
