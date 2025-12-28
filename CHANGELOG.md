@@ -1,5 +1,24 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- New `src/console.sh` with utility functions: `console::info`, `console::success`, `console::error`, `console::warn`, `main::is_dry_run`, `git::strip_origin_prefix`, `env::is_slack_configured`
+- Comprehensive function documentation for all 28+ functions
+- ShellCheck disable comment explanations throughout codebase
+- Automated GitHub release workflow (`.github/workflows/release.yml`)
+
+### Fixed
+- Added error handling to all `git push` operations in `src/git.sh` and `src/release.sh`
+- Added error handling around `eval` in `src/env.sh` for extra commands
+- Fixed insecure temp file handling in `src/slack.sh` using `mktemp` with cleanup trap
+- Standardized shell options: added `set -euo pipefail` to all source files
+- Replaced all `[` with `[[` for consistent modern Bash syntax
+
+### Changed
+- Documented magic values (v0 special case, regex patterns for version matching)
+- Improved code consistency across all modules
+
 ## [0.8.5](https://github.com/Purpose-Green/release/compare/v18...v19) - 2025-11-27
 
 - d1d6e1e Merge pull request #21 from Purpose-Green/fix/20-find-next-version

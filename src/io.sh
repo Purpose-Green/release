@@ -1,6 +1,15 @@
 #!/bin/bash
+set -euo pipefail
 
-# shellcheck disable=SC2155
+# Prompts user for confirmation and exits if not confirmed
+#
+# Arguments:
+#   $1 - prompt: The question/prompt to display (supports color codes)
+#
+# Returns:
+#   Continues if user enters 'y' or 'Y', exits with 1 otherwise
+#
+# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
 function io::confirm_or_exit() {
   local txt=$(echo -e "$1 [N/y]:")
   read -p "$txt " -r

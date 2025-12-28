@@ -1,6 +1,31 @@
 #!/bin/bash
+set -euo pipefail
 
-# shellcheck disable=SC2155
+# Cleanup function for temporary files
+_SLACK_ERROR_LOG=""
+function slack::cleanup() {
+  if [[ -n "$_SLACK_ERROR_LOG" && -f "$_SLACK_ERROR_LOG" ]]; then
+    rm -f "$_SLACK_ERROR_LOG"
+  fi
+}
+trap slack::cleanup EXIT
+
+# Sends a release notification to Slack
+#
+# Posts a formatted message to the configured Slack channel with release details,
+# commit history, and changelog link.
+#
+# Arguments:
+#   $1 - repo_info: Repository info in "owner/repo" format
+#   $2 - release_name: The release name (e.g., "2024-01-15 #1")
+#   $3 - changelog_url: URL to the full changelog comparison
+#   $4 - commits: Newline-separated list of commits in this release
+#   $5 - new_tag: The new version tag
+#
+# Returns:
+#   0 on success, 1 on failure
+#
+# shellcheck disable=SC2155 - Using local with command substitution is acceptable for readability
 function slack::notify() {
   if [[ -z "${RELEASE_SLACK_CHANNEL_ID:-}" || -z "${RELEASE_SLACK_OAUTH_TOKEN:-}" ]]; then
     echo -e "${COLOR_CYAN}Slack configuration missing." \
@@ -42,11 +67,15 @@ EOF
     return
   fi
 
-  curl -X POST https://slack.com/api/chat.postMessage \
+  _SLACK_ERROR_LOG=$(mktemp)
+  if ! curl -X POST https://slack.com/api/chat.postMessage \
     -H "Content-Type: application/json; charset=utf-8" \
     -H "Authorization: Bearer $RELEASE_SLACK_OAUTH_TOKEN" \
     --data "$slack_message" \
-    -s -o /tmp/slack-error.log
+    -s -o "$_SLACK_ERROR_LOG"; then
+    echo -e "${COLOR_RED}Failed to send Slack notification. Check $_SLACK_ERROR_LOG for details.${COLOR_RESET}"
+    return 1
+  fi
 
   echo -e "${COLOR_GREEN}Notification sent via slack${COLOR_RESET}"
 }

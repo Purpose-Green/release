@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 set -o allexport
 
 # shellcheck disable=SC2034
